@@ -46,7 +46,7 @@
 1e/0f19/TX_0d01: /include text.syrupShop2 # (vanilla text)
 1e/0fac/TX_0d05: /include text.syrupShop3 # (vanilla text)
 
-1e/1375/TX_0e1c: /include text.memberShop1 # (vanilla text)
+1e/1364/TX_0e1b: /include text.memberShop1 # (text asking to buy Strange Flute in vanilla)
 1e/23e0/TX_1709: /include text.memberShop2 # (cutscene after d3)
 1e/13a0/TX_0e1e: /include text.memberShop3 # (vanilla text)
 
@@ -101,6 +101,7 @@
     db $0e,$22,$0c,$12    ; Advance shop 1
     db $0e,$23,$0c,$13    ; Advance shop 2
     db $0d,$0a,$0d,$0c    ; Syrup shop 1
+    db $0e,$1c,$0e,$1b    ; Member shop 1
     db $0e,$1d,$17,$09    ; Member shop 2
     db $2b,$00,$17,$26    ; Market 1
     db $2b,$01,$17,$28    ; Market 2
