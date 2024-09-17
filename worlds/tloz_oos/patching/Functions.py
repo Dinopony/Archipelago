@@ -438,7 +438,10 @@ def set_file_select_text(assembler: Z80Assembler, slot_name: str):
 
 def process_item_name_for_shop_text(item: Dict) -> List[int]:
     if "player" in item:
-        item_name = f"{item['player']}'s {item['item']}"
+        player_name = item['player']
+        if len(player_name) > 14:
+            player_name = player_name[0:13] + "."
+        item_name = f"{player_name}'s {item['item']}"
     else:
         item_name = item["item"]
 
