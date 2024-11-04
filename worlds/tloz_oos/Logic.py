@@ -44,7 +44,7 @@ def create_connections(multiworld: MultiWorld, player: int):
 
 
 def apply_self_locking_rules(multiworld: MultiWorld, player: int):
-    if multiworld.worlds[player].options.accessibility == Accessibility.option_locations:
+    if multiworld.worlds[player].options.accessibility == Accessibility.option_full:
         return
 
     # Process self-locking keys first

@@ -999,7 +999,7 @@ def oos_season_in_horon_village(state: CollectionState, player: int, season: str
 # Self-locking items helper predicates ##########################################
 
 def oos_self_locking_item(state: CollectionState, player: int, region_name: str, item_name: str):
-    if state.multiworld.worlds[player].options.accessibility == Accessibility.option_locations:
+    if state.multiworld.worlds[player].options.accessibility == Accessibility.option_full:
         return False
 
     region = state.multiworld.get_region(region_name, player)
