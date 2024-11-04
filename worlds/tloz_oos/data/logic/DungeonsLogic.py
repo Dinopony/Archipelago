@@ -778,11 +778,14 @@ def make_d7_logic(player: int):
 
         ["d7 stalfos chest", "shining blue owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
 
-        ["enter d7", "d7 right of entrance", False, lambda state: any([
-            oos_has_small_keys(state, player, 7, 5),
-            all([
-                oos_has_small_keys(state, player, 7, 1),
-                oos_self_locking_small_key(state, player, "d7 right of entrance", 7)
+        ["enter d7", "d7 right of entrance", False, lambda state: all([
+            oos_can_kill_normal_enemy(state, player),
+            any([
+                oos_has_small_keys(state, player, 7, 5),
+                all([
+                    oos_has_small_keys(state, player, 7, 1),
+                    oos_self_locking_small_key(state, player, "d7 right of entrance", 7)
+                ])
             ])
         ])],
 
