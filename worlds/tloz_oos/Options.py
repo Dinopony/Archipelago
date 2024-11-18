@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, StartInventoryPool, \
-    ItemDict
+    ItemDict, ItemsAccessibility
 
 
 class OracleOfSeasonsGoal(Choice):
@@ -465,6 +465,7 @@ class OracleOfSeasonsRemoveItemsFromPool(ItemDict):
 
 @dataclass
 class OracleOfSeasonsOptions(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     start_inventory_from_pool: StartInventoryPool
     goal: OracleOfSeasonsGoal
     logic_difficulty: OracleOfSeasonsLogicDifficulty

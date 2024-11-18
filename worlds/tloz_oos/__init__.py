@@ -233,15 +233,15 @@ class OracleOfSeasonsWorld(World):
             self.portal_connections = dict(zip(it, it))
             self.portal_connections[guaranteed_portal_holodrum] = guaranteed_portal_subrosia
 
-        # If accessibility is not locations, don't perform any check on what was randomly picked
-        if self.options.accessibility != Accessibility.option_locations:
-            return
+        # If essences are placed in dungeons and D8 dungeon portal is unreachable, this makes the seed unbeatable.
+        # To avoid this, we re-shuffle portals recursively until we end up with a satisfying shuffle.
+        if self.options.required_essences == 8 and not self.options.shuffle_essences and not self.is_d8_portal_reachable():
+            self.shuffle_portals()
 
-        # If accessibility IS locations, we need to ensure that Temple Remains upper portal doesn't lead to the volcano
-        # that can be triggered to open Temple Remains cave, since it would make it unreachable forever.
-        # Same goes with D8 <-> Volcanoes west portal in free shuffle mode.
-        # In that case, just redo the shuffle recursively until we end up with a satisfying shuffle.
-        if not self.is_volcanoes_west_portal_reachable():
+        # If accessibility option expects all locations or all progression items to be reachable, portals need to be
+        # set in a way that is valid regarding this condition. If that is not the case, re-shuffle portals recursively
+        # until we end up with a satisfying shuffle.
+        if self.options.accessibility != Accessibility.option_minimal and not self.is_volcanoes_west_portal_reachable():
             self.shuffle_portals()
 
     def are_portals_connected(self, portal_1, portal_2):
@@ -259,6 +259,9 @@ class OracleOfSeasonsWorld(World):
         if self.are_portals_connected("d8 entrance portal", "volcanoes west portal"):
             return False
         return True
+
+    def is_d8_portal_reachable(self):
+        return not self.are_portals_connected("d8 entrance portal", "volcanoes west portal")
 
     def randomize_old_men(self):
         if self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_shuffled_values:
@@ -584,16 +587,14 @@ class OracleOfSeasonsWorld(World):
                 collection_state.remove(item)
 
             # Perform a prefill to place confined items inside locations of this dungeon
-            for attempts_remaining in range(2, -1, -1):
-                self.random.shuffle(dungeon_locations)
-                try:
-                    fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
-                                     single_player_placement=True, lock=True, allow_excluded=True)
-                    break
-                except FillError as exc:
-                    if attempts_remaining == 0:
-                        raise exc
-                    logging.debug(f"Failed to shuffle dungeon items for player {self.player}. Retrying...")
+            self.random.shuffle(dungeon_locations)
+            try:
+                fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
+                                 single_player_placement=True, lock=True, allow_excluded=True)
+                break
+            except FillError as exc:
+                logging.error(f"Failed to pre-fill Oracle of Seasons dungeon items for slot {self.multiworld.get_player_name(self.player)}")
+                raise exc
 
     def pre_fill_seeds(self) -> None:
         # The prefill algorithm for seeds has a few constraints:
