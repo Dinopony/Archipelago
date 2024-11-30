@@ -45,6 +45,19 @@ class OracleOfSeasonsRequiredEssences(Range):
     default = 8
 
 
+class OracleOfSeasonsPlacedEssences(Range):
+    """
+    The amount of essences that will be placed in the world. Removed essences are replaced by filler items instead, and
+    if essences are not shuffled, those filler items will be placed on the pedestal where the essence would have been.
+    If the value for "Placed Essences" is lower than "Required Essences" (which can happen when using random values
+    for both), a new random value is automatically picked in the valid range.
+    """
+    display_name = "Placed Essences"
+    range_start = 0
+    range_end = 8
+    default = 8
+
+
 class OracleOfSeasonsDefaultSeasons(Choice):
     """
     The world of Holodrum is split in regions, each one having its own default season being forced when entering it.
@@ -470,6 +483,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     goal: OracleOfSeasonsGoal
     logic_difficulty: OracleOfSeasonsLogicDifficulty
     required_essences: OracleOfSeasonsRequiredEssences
+    placed_essences: OracleOfSeasonsPlacedEssences
     default_seasons: OracleOfSeasonsDefaultSeasons
     normalize_horon_village_season: OracleOfSeasonsHoronSeason
     animal_companion: OracleOfSeasonsAnimalCompanion

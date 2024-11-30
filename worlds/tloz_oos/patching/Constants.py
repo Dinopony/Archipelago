@@ -336,6 +336,7 @@ DEFINES = {
 
 ASM_FILES = [
     "asm/animals.yaml",
+    "asm/any_item_on_essence_pedestal.yaml",
     "asm/boss_items.yaml",
     "asm/collect.yaml",
     "asm/combat_difficulty.yaml",

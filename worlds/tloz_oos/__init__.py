@@ -114,12 +114,14 @@ class OracleOfSeasonsWorld(World):
         self.old_man_rupee_values: Dict[str, int] = OLD_MAN_RUPEE_VALUES.copy()
         self.samasa_gate_code: List[int] = SAMASA_GATE_CODE.copy()
         self.shop_prices: Dict[str, int] = SHOP_PRICES_DIVIDERS.copy()
+        self.essences_in_game: List[str] = ESSENCES.copy()
         self.random_rings_pool: List[str] = []
         self.remaining_progressive_gasha_seeds = 0
 
     def generate_early(self):
         self.remaining_progressive_gasha_seeds = self.options.deterministic_gasha_locations.value
 
+        self.pick_essences_in_game()
         self.restrict_non_local_items()
         self.randomize_default_seasons()
         self.randomize_old_men()
@@ -154,6 +156,26 @@ class OracleOfSeasonsWorld(World):
 
         self.randomize_shop_prices()
         self.create_random_rings_pool()
+
+    def pick_essences_in_game(self):
+        # If the value for "Placed Essences" is lower than "Required Essences" (which can happen when using random
+        # values for both), a new random value is automatically picked in the valid range.
+        if self.options.required_essences > self.options.placed_essences:
+            self.options.placed_essences.value = self.random.randint(self.options.required_essences.value, 8)
+
+        # If some essence pedestal locations were excluded and essences are not shuffled,
+        # remove those essences in priority
+        if not self.options.shuffle_essences:
+            excluded_locations_data = {name: data for name,data in LOCATIONS_DATA.items() if name in self.options.exclude_locations.value}
+            for loc_name, loc_data in excluded_locations_data.items():
+                if "essence" in loc_data and loc_data["essence"] is True:
+                    self.essences_in_game.remove(loc_data["vanilla_item"])
+            if len(self.essences_in_game) < self.options.required_essences:
+                raise ValueError(f"Too many essence pedestal locations were excluded, seed will be unbeatable")
+
+        # If we need to remove more essences, pick them randomly
+        self.random.shuffle(self.essences_in_game)
+        self.essences_in_game = self.essences_in_game[0:self.options.placed_essences]
 
     def restrict_non_local_items(self):
         # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
@@ -446,15 +468,6 @@ class OracleOfSeasonsWorld(World):
         item_pool_dict = {}
         filler_item_count = 0
         for loc_name, loc_data in LOCATIONS_DATA.items():
-            if "essence" in loc_data and loc_data["essence"] is True and not self.options.shuffle_essences:
-                item = self.create_item(loc_data['vanilla_item'])
-                # If essence location is excluded but we are not in essence-sanity, consider that essence as a filler
-                # item so logic doesn't expect the player to enter that dungeon
-                if loc_name in self.options.exclude_locations.value:
-                    item.classification = ItemClassification.filler
-                location = self.multiworld.get_location(loc_name, self.player)
-                location.place_locked_item(item)
-                continue
             if not self.location_is_active(loc_name, loc_data):
                 continue
             if "vanilla_item" not in loc_data:
@@ -483,6 +496,18 @@ class OracleOfSeasonsWorld(World):
                 # Compasses and Dungeon Maps don't exist if player starts with them
                 filler_item_count += 1
                 continue
+            if "essence" in loc_data and loc_data["essence"] is True:
+                # If essence was decided not to be placed because of "Placed Essences" option or
+                # because of pedestal being an excluded location, replace it with a filler item
+                if item_name not in self.essences_in_game:
+                    item_name = self.get_filler_item_name()
+                # If essences are not shuffled, place and lock this item directly on the pedestal.
+                # Otherwise, the fill algorithm will take care of placing them anywhere in the multiworld.
+                if not self.options.shuffle_essences:
+                    item = self.create_item(item_name)
+                    location = self.multiworld.get_location(loc_name, self.player)
+                    location.place_locked_item(item)
+                    continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
