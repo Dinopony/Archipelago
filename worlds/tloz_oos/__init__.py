@@ -361,7 +361,7 @@ class OracleOfSeasonsWorld(World):
             self.create_location(location_data['region_id'], location_name, is_local)
 
         self.create_events()
-        self.exclude_problematic_locations()
+        self.exclude_locations_automatically()
 
     def create_event(self, region_name, event_item_name):
         region = self.multiworld.get_region(region_name, self.player)
@@ -422,7 +422,7 @@ class OracleOfSeasonsWorld(World):
             for region_name in self.old_man_rupee_values:
                 self.create_event(region_name, "rupees from " + region_name)
 
-    def exclude_problematic_locations(self):
+    def exclude_locations_automatically(self):
         locations_to_exclude = []
         # If goal essence requirement is set to a specific value, prevent essence-bound checks which require more
         # essences than this goal to hold anything of value
@@ -439,6 +439,12 @@ class OracleOfSeasonsWorld(World):
         # in the bombable cave of Temple Remains unreachable forever. Exclude it in such conditions.
         if not self.is_volcanoes_west_portal_reachable():
             locations_to_exclude.append("Temple Remains: Item in Cave Behind Rockslide")
+
+        # If dungeons wihout essence need to be excluded, do it if conditions are met
+        if self.options.exclude_dungeons_without_essence and not self.options.shuffle_essences:
+            for i, essence_name in enumerate(ESSENCES):
+                if ESSENCES[i] not in self.essences_in_game:
+                    locations_to_exclude.extend(self.location_name_groups[f"D{i+1}"])
 
         for name in locations_to_exclude:
             self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
