@@ -182,6 +182,7 @@ class OracleOfSeasonsWorld(World):
         # to be placed locally (e.g. dungeon items with keysanity off)
         if not self.options.keysanity_small_keys:
             self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
+            self.options.non_local_items.value -= self.item_name_groups["Master Keys"]
         if not self.options.keysanity_boss_keys:
             self.options.non_local_items.value -= self.item_name_groups["Boss Keys"]
         if not self.options.keysanity_maps_compasses:
