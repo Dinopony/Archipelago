@@ -482,41 +482,58 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: OracleOfSeasonsGoal
     logic_difficulty: OracleOfSeasonsLogicDifficulty
+
+    # Essences
     required_essences: OracleOfSeasonsRequiredEssences
     placed_essences: OracleOfSeasonsPlacedEssences
+    shuffle_essences: OracleOfSeasonsEssenceSanity
+
+    # Seasons
     default_seasons: OracleOfSeasonsDefaultSeasons
     normalize_horon_village_season: OracleOfSeasonsHoronSeason
+
+    # Overworld layout options
     animal_companion: OracleOfSeasonsAnimalCompanion
-    default_seed: OracleOfSeasonsDefaultSeedType
-    duplicate_seed_tree: OracleOfSeasonsDuplicateSeedTree
+    shuffle_portals: OracleOfSeasonsPortalShuffle
     shuffle_dungeons: OracleOfSeasonsDungeonShuffle
     remove_d0_alt_entrance: OracleOfSeasonsD0AltEntrance
     remove_d2_alt_entrance: OracleOfSeasonsD2AltEntrance
-    shuffle_portals: OracleOfSeasonsPortalShuffle
+    default_seed: OracleOfSeasonsDefaultSeedType
+    duplicate_seed_tree: OracleOfSeasonsDuplicateSeedTree
+
+    # Optional locations
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
-    shuffle_essences: OracleOfSeasonsEssenceSanity
+    deterministic_gasha_locations: OracleOfSeasonsGashaLocations
+    advance_shop: OracleOfSeasonsAdvanceShop
+
+    # Dungeon items
     master_keys: OracleOfSeasonsMasterKeys
     keysanity_small_keys: OracleOfSeasonsSmallKeyShuffle
     keysanity_boss_keys: OracleOfSeasonsBossKeyShuffle
     keysanity_maps_compasses: OracleOfSeasonsMapCompassShuffle
+
+    # Numeric requirements for some checks / access to regions
     treehouse_old_man_requirement: OraclesOfSeasonsTreehouseOldManRequirement
     tarm_gate_required_jewels: OraclesOfSeasonsTarmGateRequirement
     golden_beasts_requirement: OraclesOfSeasonsGoldenBeastsRequirement
     sign_guy_requirement: OracleOfSeasonsSignGuyRequirement
+
+    # Other randomizable stuff
     randomize_lost_woods_item_sequence: OracleOfSeasonsLostWoodsItemSequence
     randomize_lost_woods_main_sequence: OracleOfSeasonsLostWoodsMainSequence
     randomize_samasa_gate_code: OracleOfSeasonsSamasaGateCode
     samasa_gate_code_length: OracleOfSeasonsSamasaGateCodeLength
-    deterministic_gasha_locations: OracleOfSeasonsGashaLocations
-    remove_useless_rings: OracleOfSeasonsRingQuality
+
+    # Miscellaneous options
     shop_prices_factor: OracleOfSeasonsPricesFactor
-    advance_shop: OracleOfSeasonsAdvanceShop
+    enforce_potion_in_shop: OracleOfSeasonsEnforcePotionInShop
+    remove_useless_rings: OracleOfSeasonsRingQuality
     fools_ore: OracleOfSeasonsFoolsOre
     warp_to_start: OracleOfSeasonsWarpToStart
-    enforce_potion_in_shop: OracleOfSeasonsEnforcePotionInShop
     combat_difficulty: OracleOfSeasonsCombatDifficulty
     quick_flute: OracleOfSeasonsQuickFlute
     starting_maps_compasses: OracleOfSeasonsStartingMapsCompasses
+
     remove_items_from_pool: OracleOfSeasonsRemoveItemsFromPool
     death_link: DeathLink
