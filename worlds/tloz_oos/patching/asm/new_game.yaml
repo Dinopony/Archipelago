@@ -1,6 +1,9 @@
 # setting up a new file - this is done when link is dropped into the world, not
 # at actual file creation.
 
+# Set default text speed to 5
+07/0183/: db $04
+
 # Change Link starting point
 07/0193/: db option.startingGroup       # Room
 07/0195/: db option.startingRoom        # Room
