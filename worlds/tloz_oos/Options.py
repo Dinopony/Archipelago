@@ -213,6 +213,7 @@ class OracleOfSeasonsExcludeDungeonsWithoutEssence(DefaultOnToggle):
     If enabled, all dungeons whose essence has been removed because of the "Placed Essences" option will be excluded,
     which means you can safely ignore them since they cannot contain an item that is required to complete the seed.
     If "Shuffle Essences" is enabled, this option has no effect.
+    Hero's Cave is not considered to be a dungeon for this option, and therefore is never excluded.
     """
     display_name = "Exclude Dungeons Without Essence"
 

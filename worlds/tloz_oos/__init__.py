@@ -512,8 +512,11 @@ class OracleOfSeasonsWorld(World):
                 # Otherwise, the fill algorithm will take care of placing them anywhere in the multiworld.
                 if not self.options.shuffle_essences:
                     item = self.create_item(item_name)
-                    location = self.multiworld.get_location(loc_name, self.player)
-                    location.place_locked_item(item)
+                    # Force a filler classification to avoid edge cases where we generate a "filler" currency item that
+                    # ends up being progression, preventing location from being excluded
+                    if item_name not in self.essences_in_game:
+                        item.classification = ItemClassification.filler
+                    self.multiworld.get_location(loc_name, self.player).place_locked_item(item)
                     continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
@@ -620,13 +623,8 @@ class OracleOfSeasonsWorld(World):
 
             # Perform a prefill to place confined items inside locations of this dungeon
             self.random.shuffle(dungeon_locations)
-            try:
-                fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
-                                 single_player_placement=True, lock=True, allow_excluded=True)
-                break
-            except FillError as exc:
-                logging.error(f"Failed to pre-fill Oracle of Seasons dungeon items for slot {self.multiworld.get_player_name(self.player)}")
-                raise exc
+            fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
     def pre_fill_seeds(self) -> None:
         # The prefill algorithm for seeds has a few constraints:
