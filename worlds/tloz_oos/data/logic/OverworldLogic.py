@@ -458,8 +458,8 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["spool stump", "spool swamp middle", False, lambda state: any([
-            oos_get_default_season(state, player, "SPOOL_SWAMP") != 'spring',
-            oos_can_remove_season(state, player, 'spring'),
+            oos_get_default_season(state, player, "SPOOL_SWAMP") != SEASON_SPRING,
+            oos_can_remove_season(state, player, SEASON_SPRING),
             oos_has_flippers(state, player),
             oos_can_summon_dimitri(state, player)
         ])],
