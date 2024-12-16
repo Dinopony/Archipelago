@@ -125,9 +125,9 @@
     
     ; SW => spring
     @testSW:
-    ld a,BTN_DOWN | BTN_RIGHT
+    ld a,BTN_DOWN | BTN_LEFT
     and b
-    cp BTN_DOWN | BTN_RIGHT
+    cp BTN_DOWN | BTN_LEFT
     jr nz,@vanillaCycle
     ld b,SEASON_WINTER  ; Make it as if current season was winter to try switching to spring
     ret
