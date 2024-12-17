@@ -636,7 +636,7 @@ def make_d7_logic(player: int):
         ["enter d7", "enter poe A", False, lambda state: all([
             oos_has_small_keys(state, player, 7, 1),
             oos_has_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player, False)
+            oos_can_use_ember_seeds(state, player, True)
         ])],
 
         ["enter poe A", "d7 pot room", False, lambda state: all([
@@ -644,7 +644,7 @@ def make_d7_logic(player: int):
                 # Kill poe sister
                 oos_can_kill_armored_enemy(state, player),
                 oos_has_rod(state, player),
-                oos_can_use_ember_seeds(state, player, False)
+                oos_can_use_ember_seeds(state, player, True)
             ]),
             oos_has_bracelet(state, player)
         ])],
