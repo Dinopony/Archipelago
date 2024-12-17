@@ -18,10 +18,15 @@
 # An arrival pos of "00" means it isn't checked
 # A season of "FF" means nothing changes
 04//specificWarpSeasons: |
-    db 03,ab,44,defaultSeason.HORON_VILLAGE     ; subrosia to horon
-    db 03,a8,14,defaultSeason.TEMPLE_REMAINS    ; subrosia to temple remains
-    db 85,12,00,defaultSeason.WOODS_OF_WINTER   ; sunken city to woods of winter
-    db 80,a7,00,defaultSeason.EYEGLASS_LAKE     ; warp to start (holodrum)
+    db 03,ab,44,defaultSeason.HORON_VILLAGE     ; Landing on Horon underground portal
+    db 00,b9,22,defaultSeason.EYEGLASS_LAKE     ; Landing on Eyeglass Lake portal
+    db 00,9a,33,defaultSeason.EYEGLASS_LAKE     ; Landing on Eastern Suburbs portal
+    db 00,1e,54,defaultSeason.SUNKEN_CITY       ; Landing on Mt. Cucco portal
+    db 03,a8,14,defaultSeason.TEMPLE_REMAINS    ; Landing on upper Temple Remains portal
+    db 00,25,22,defaultSeason.TEMPLE_REMAINS    ; Landing on lower Temple Remains portal
+    db 00,b0,35,defaultSeason.SPOOL_SWAMP       ; Landing on Spool Swamp portal
+    db 85,12,00,defaultSeason.WOODS_OF_WINTER   ; Diving into Woods of Winter waterfall cave from Sunken City
+    db 80,a7,00,defaultSeason.EYEGLASS_LAKE     ; Warping to start
     db ff
 
 # This function aims to fix season handling for Subrosia -> interior map warps
