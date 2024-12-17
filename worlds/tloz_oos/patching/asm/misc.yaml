@@ -52,25 +52,6 @@
     jp lookupCollisionTable
 05/1fe8/: call cliffLookup
 
-# replace a random item drop with gale seeds 1/0 of the time if the player is
-# out of gale seeds. just to be nice since warping out of one-ways is in
-# logic.
-# 06//dropExtraGalesOnEmpty: |
-#     ld a,TREASURE_GALE_SEEDS
-#     call checkTreasureObtained
-#     jr nc,@done
-#     ld l,$b8
-#     or (hl)
-#     jr nz,@done
-#     call getRandomNumber
-#     cp $40
-#     jr nc,@done
-#     ld c,$08
-#     @done:
-#     call getFreePartSlot
-#     ret
-# 06/07f5/: call dropExtraGalesOnEmpty
-
 # custom script command to use on d1 entrance screen: disable warp tiles
 # until bit of cfc0 is set. fixes a vanilla bug where dismounting an animal
 # on that screen allowed you to enter without the key.
@@ -119,3 +100,10 @@
 
 # Remove Moblin King text when he sees Link to the right of his fort (near Sunken City)
 0b/3705/: db $00
+
+# Stop Rosa date if any Subrosian portal is taken
+05//stopRosaDate: |
+    ld a,$0b  ; GLOBALFLAG_DATING_ROSA
+    call unsetGlobalFlag
+    jp $2099 ; objectCenterOnTile
+05/0c90/: jp stopRosaDate

@@ -189,6 +189,7 @@ DEFINES = {
     "clearStaticObjects": "$3076",
     "checkGlobalFlag": "$30c7",
     "setGlobalFlag": "$30cd",
+    "unsetGlobalFlag": "$30d3",
     "fastFadeoutToWhite": "$313b",
     "loadScreenMusicAndSetRoomPack": "$32dc",
     "setTile": "$3a52",
