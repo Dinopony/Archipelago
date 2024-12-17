@@ -140,11 +140,14 @@ DEFINES = {
     "wLinkSwimmingState": "$cc78",
     "wLinkImmobilized": "$cc7c",
     "wDisabledObjects": "$cca4",
+    "wRoomEdgeY": "$cca0",
+    "wRoomEdgeX": "$cca1",
     "wDisableWarpTiles": "$ccaa",
     "wScreenTransitionDirection": "$cd02",
     "wScreenOffsetY": "$cd08",
 
     "w1Link.yh": "$d00b",
+    "w1Link.xh": "$d00d",
     "w7ActiveBank": "$d0d4",
 
     # High RAM offsets (FF00 + offset)
@@ -198,6 +201,7 @@ DEFINES = {
     "getFreePartSlot": "$3ea7",
 
     # Byte constants
+    "TEXT_WARP_PROTECTION_MARGIN": "$09",
     "STARTING_TREE_MAP_INDEX": "$f8",
     "INTERACID_TREASURE": "$60",
     "BTN_A": "$01",
