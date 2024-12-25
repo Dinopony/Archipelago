@@ -398,6 +398,7 @@ class OracleOfSeasonsWorld(World):
         self.create_event("tower of autumn", "_opened_tower_of_autumn")
         self.create_event("d2 moblin chest", "_reached_d2_bracelet_room")
         self.create_event("d5 drop ball", "_dropped_d5_magnet_ball")
+        self.create_event("d6 kill vire", "_killed_vire")
         self.create_event("d8 SE crystal", "_dropped_d8_SE_crystal")
         self.create_event("d8 NE crystal", "_dropped_d8_NE_crystal")
         self.create_event("d2 rupee room", "_reached_d2_rupee_room")
