@@ -711,7 +711,8 @@ class OracleOfSeasonsWorld(World):
                    "required_essences", "tarm_gate_required_jewels", "treehouse_old_man_requirement",
                    "sign_guy_requirement", "golden_beasts_requirement",
                    # Tracker QoL
-                   "enforce_potion_in_shop", "keysanity_small_keys", "keysanity_boss_keys", "starting_maps_compasses"
+                   "enforce_potion_in_shop", "keysanity_small_keys", "keysanity_boss_keys", "starting_maps_compasses",
+                   "deterministic_gasha_locations"
                    ]
 
         slot_data = self.options.as_dict(*options)
