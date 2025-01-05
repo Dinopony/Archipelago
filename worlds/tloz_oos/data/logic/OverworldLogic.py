@@ -933,7 +933,14 @@ def make_holodrum_logic(player: int):
         # GOLDEN BEASTS #############################################################################################
 
         ["d0 entrance", "golden darknut", False, lambda state: all([
-            oos_season_in_western_coast(state, player, SEASON_SPRING),
+            any([
+                oos_get_default_season(state, player, "WESTERN_COAST") == SEASON_SPRING,
+                all([
+                    oos_season_in_western_coast(state, player, SEASON_SPRING),
+                    state.has("Pirate's Bell", player),
+                    state.has("_met_pirates", player),
+                ])
+            ]),
             any([
                 oos_has_sword(state, player),
                 oos_has_fools_ore(state, player)
