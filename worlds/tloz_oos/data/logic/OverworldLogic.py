@@ -612,10 +612,19 @@ def make_holodrum_logic(player: int):
             ])
         ])],
 
-        ["sunken city", "ingo trade", False, lambda state: any([
-            state.has("Goron Vase", player),
-            oos_self_locking_item(state, player, "ingo trade", "Goron Vase")
+        ["sunken city", "ingo trade", False, lambda state: all([
+            any([
+                oos_has_feather(state, player),
+                oos_has_flippers(state, player),
+                oos_can_summon_dimitri(state, player),
+                oos_get_default_season(state, player, "SUNKEN_CITY") == SEASON_WINTER
+            ]),
+            any([
+                state.has("Goron Vase", player),
+                oos_self_locking_item(state, player, "ingo trade", "Goron Vase")
+            ])
         ])],
+
         ["sunken city", "syrup trade", False, lambda state: all([
             any([
                 oos_get_default_season(state, player, "SUNKEN_CITY") == SEASON_WINTER,
