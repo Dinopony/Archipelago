@@ -638,7 +638,7 @@ def make_holodrum_logic(player: int):
             ]),
             state.has("Mushroom", player)
         ])],
-        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 600)],
+        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 500)],
 
         # Use Dimitri to get the tree seeds, using dimitri to get seeds being medium difficulty
         ["sunken city dimitri", "sunken city tree", False,lambda state: all([
