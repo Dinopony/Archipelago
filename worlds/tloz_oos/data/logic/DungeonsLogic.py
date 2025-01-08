@@ -481,13 +481,14 @@ def make_d5_logic(player: int):
         ["d5 pot room", "d5 magnet ball chest", False, lambda state: all([
             any([
                 oos_has_flippers(state, player),
-                oos_can_jump_6_wide_liquid(state, player),
                 all([
                     # Lower route pushing secret blocks requires knowledge, therefore is medium+.
                     # Going there requires jumping a 3.2 wide liquid gap which corresponds the best to a "4 wide pit"
                     # in terms of logic requirements.
                     oos_can_jump_4_wide_pit(state, player),
                     oos_option_medium_logic(state, player),
+                    # Upper route would require 6 wide liquid that can only be jumped above with a bomb jump,
+                    # which makes the lower route always better when in medium+.
                 ])
             ]),
             any([
