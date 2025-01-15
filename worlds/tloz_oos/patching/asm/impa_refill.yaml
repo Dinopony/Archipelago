@@ -1,13 +1,27 @@
-15//impaRefill: |
-    push de
+# An "adapter" function to change the parameter registers, making it easier to use in a common context
+# (similar to checkTreasureObtained from bank 0, but without an interBankCall)
+3f//checkTreasureObtained_bodyProxy: |
     push hl
-    
+    ld l,a
+    call $446d  ; checkTreasureObtained_body
+    ld a,l
+    srl h
+    pop hl
+    ret
+
+# Refill all consumable / losable items in the inventory:
+#   - each seed type up to 20
+#   - all bombs
+#   - shield (in case it was eaten by a Like Like)
+#   - health
+# No new item can be obtained from this, it can only refill what the player had and used/lost at some point.
+3f//refillInventory: |
     ld b,TREASURE_EMBER_SEEDS
     ld hl,wNumEmberSeeds
     
     @refillSeedsLoop:
     ld a,b
-    call checkTreasureObtained
+    call checkTreasureObtained_bodyProxy
     jr nc,@nextSeed
     ld a,(hl)           ; currently owned seeds
     cp $20
@@ -24,7 +38,7 @@
     
     @refillBombs:
     ld a,TREASURE_BOMBS
-    call checkTreasureObtained
+    call checkTreasureObtained_bodyProxy
     jr nc,@refillShield
     ld hl,wMaxBombs
     ldd a,(hl)
@@ -32,13 +46,11 @@
     
     @refillShield:
     ld a,TREASURE_SHIELD
-    call checkTreasureObtained
+    call checkTreasureObtained_bodyProxy
     jr nc,@refillHealth
     ld a,TREASURE_SHIELD
-    ldh ($8b),a     ; put item ID in FF8B
-    ld e,$3f
-    ld hl,$46bc     ; addTreasureToInventory in bank 3F
-    call interBankCall
+    ldh ($8b),a         ; put item ID in FF8B
+    call $46bc          ; addTreasureToInventory 
     
     @refillHealth:
     ld hl,wLinkMaxHealth
@@ -50,11 +62,20 @@
     call playSound
     ld a,$03
     ld (wStatusBarNeedsRefresh),a
-    
-    pop hl
-    pop de
     ret
 
+# A function usable through the `asm15` script command which triggers the refill function above
+15//impaRefill: |
+    push hl
+    push de
+    ld e,$3f
+    ld hl,refillInventory
+    call interBankCall
+    pop de
+    pop hl
+    ret
+
+# Actual use on Impa script of the refill script function above
 0b/34ef/: |
     db checkabutton
     db disableinput
