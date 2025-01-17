@@ -281,6 +281,10 @@ def oos_can_farm_rupees(state: CollectionState, player: int):
     return oos_has_sword(state, player) or oos_has_shovel(state, player)
 
 
+def oos_can_pay_business_scrub(state: CollectionState, player: int):
+    return oos_has_rupees(state, player, 150)
+
+
 def oos_has_ore_chunks(state: CollectionState, player: int, amount: int):
     world = state.multiworld.worlds[player]
     if not world.options.shuffle_golden_ore_spots:

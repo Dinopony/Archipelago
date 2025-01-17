@@ -192,6 +192,16 @@ class OracleOfSeasonsOldMenShuffle(Choice):
     default = 3
 
 
+class OracleOfSeasonsBusinessScrubsShuffle(Toggle):
+    """
+    This option adds the 4 accessible business scrubs (Spool Swamp, Samasa Desert, D2, D4) to the pool of randomized
+    locations. Just like any other shop, they ask for rupees in exchange of the randomized item,
+    which can only be purchased once.
+    Please note that scrubs inside dungeons can hold dungeon items, such as keys.
+    """
+    display_name = "Shuffle Business Scrubs"
+
+
 class OracleOfSeasonsGoldenOreSpotsShuffle(Toggle):
     """
     This option adds the 7 hidden digging spots in Subrosia (containing 50 Ore Chunks each) to the pool
@@ -514,6 +524,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
 
     # Optional locations
     shuffle_old_men: OracleOfSeasonsOldMenShuffle
+    shuffle_business_scrubs: OracleOfSeasonsBusinessScrubsShuffle
     shuffle_golden_ore_spots: OracleOfSeasonsGoldenOreSpotsShuffle
     deterministic_gasha_locations: OracleOfSeasonsGashaLocations
     advance_shop: OracleOfSeasonsAdvanceShop

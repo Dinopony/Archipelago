@@ -154,6 +154,13 @@ RUPEE_OLD_MAN_LOCATIONS = [
     "Tarm Ruins: Old Man Near D6"
 ]
 
+SCRUB_LOCATIONS = [
+    "Spool Swamp: Business Scrub",
+    "Snake's Remains: Business Scrub",
+    "Dancing Dragon Dungeon (1F): Business Scrub",
+    "Samasa Desert: Business Scrub"
+]
+
 SUBROSIA_HIDDEN_DIGGING_SPOTS_LOCATIONS = [
     "Subrosia: Hot Bath Digging Spot",
     "Subrosia: Market Portal Digging Spot",
@@ -183,6 +190,10 @@ SHOP_PRICES_DIVIDERS = {
     "subrosianMarket3": 1.5,
     "subrosianMarket4": 1.5,
     "subrosianMarket5": 1.5,
+    "spoolSwampScrub": 1.5,
+    "samasaCaveScrub": 1.5,
+    "d2Scrub": 1.5,
+    "d4Scrub": 1.5,
 }
 
 ITEM_GROUPS = {
@@ -429,3 +440,4 @@ COLLECT_DIVER_ROOM = 0x80
 COLLECT_POE_SKIP_ROOM = 0x81
 COLLECT_MAKU_TREE = 0x82
 COLLECT_D5_ARMOS_PUZZLE = 0x83
+COLLECT_D4_SCRUB_ROOM = 0x84

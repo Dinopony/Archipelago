@@ -130,6 +130,7 @@ def make_d2_logic(player: int):
             oos_can_break_bush(state, player, False),
             oos_has_bombs(state, player),
         ])],
+        ["d2 alt entrances", "d2 alt entrances scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
 
         # 2 keys
         ["d2 roller chest", "d2 spinner", False, lambda state: oos_has_small_keys(state, player, 2, 2)],
@@ -294,6 +295,7 @@ def make_d4_logic(player: int):
         ])],
 
         ["d4 stalfos stairs", "d4 terrace", False, None],
+        ["d4 terrace", "d4 terrace scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
 
         ["d4 stalfos stairs", "d4 torch chest", False, lambda state: all([
             oos_has_slingshot(state, player),

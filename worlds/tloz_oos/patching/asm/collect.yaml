@@ -89,6 +89,7 @@
     dw collectPoeSkipRoom
     dw collectMakuTree
     dw collectD5Armos
+    dw collectD4ScrubRoom
 
 # master diver's room has chest on the left and reward on the right.
 06//collectDiverRoom: |
@@ -117,6 +118,16 @@
     ld e,COLLECT_FALL
     ret z
     ld e,COLLECT_PICKUP
+    ret
+
+# room in D4 before miniboss with chest + scrub
+06//collectD4ScrubRoom: |
+    ld e,$4d
+    ld a,(de)     ; object x position
+    cp $40
+    ld e,COLLECT_CHEST
+    ret c
+    ld e,COLLECT_PICKUP_NOFLAG
     ret
 
 # when the falling item hits the water, it creates a new item interaction.

@@ -93,6 +93,7 @@ class OracleOfSeasonsWorld(World):
     options: OracleOfSeasonsOptions
     required_client_version = (0, 5, 0)
     web = OracleOfSeasonsWeb()
+    topology_present = True
 
     settings: ClassVar[OracleOfSeasonsSettings]
     settings_key = "tloz_oos_options"
@@ -334,6 +335,8 @@ class OracleOfSeasonsWorld(World):
             return self.options.shuffle_golden_ore_spots
         if location_name in RUPEE_OLD_MAN_LOCATIONS:
             return self.options.shuffle_old_men == OracleOfSeasonsOldMenShuffle.option_turn_into_locations
+        if location_name in SCRUB_LOCATIONS:
+            return self.options.shuffle_business_scrubs
         if location_name == "Horon Village: Shop #3":
             return not self.options.enforce_potion_in_shop
         if location_name.startswith("Gasha Nut #"):

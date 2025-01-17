@@ -50,6 +50,10 @@
 1e/23e0/TX_1709: /include text.memberShop2 # (cutscene after d3)
 1e/13a0/TX_0e1e: /include text.memberShop3 # (vanilla text)
 
+20/216e/TX_4509: /include text.spoolSwampScrub # (vanilla text)
+20/21f0/TX_450c: /include text.d4Scrub # (vanilla text)
+20/2071/TX_4502: /include text.d2Scrub # (vanilla is TX_450d, we use 4502 which replaces Moosh scrub greeting, being unreachable in rando)
+
 # Hint for the sequence going to pedestal
 1e/056d/TX_0b50: /include text.lostWoodsPedestalSequence
 # Hint for the sequence going to D6
@@ -265,6 +269,14 @@
 3f//TX_562d: /include text.compassD6
 3f//TX_562e: /include text.compassD7
 3f//TX_562f: /include text.compassD8
+3f//TX_5630: /include text.samasaCaveScrub
+
+# Text for generic refill scrubs
+3f//TX_5631: |
+    db $49,$03,$16,$72,$65,$66,$69,$6c,$6c,$01                  ; "I can refill    "
+    db $03,$0b,$62,$61,$67,$02,$e2                              ; "your bag for    "
+    db $09,$04,$0c,$08,$02,$8f,$09,$00,$20,$04,$b5,$2e,$01      ; "XXX Rupees only."
+    db $02,$00,$00                                              ; "  > Yes  > No   "
 
 3f//customTextTable: |
     dw TX_5600, TX_5601, TX_5602, TX_5603
@@ -279,6 +291,7 @@
     dw TX_5624, TX_5625, TX_5626, TX_5627
     dw TX_5628, TX_5629, TX_562a, TX_562b
     dw TX_562c, TX_562d, TX_562e, TX_562f
+    dw TX_5630, TX_5631
 
 # Override getTextAddress to have a specific custom bank_id point to text somewhere else
 3f//checkCustomTextOverride: |

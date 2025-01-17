@@ -447,6 +447,7 @@ def make_holodrum_logic(player: int):
             ]),
             oos_has_bracelet(state, player)
         ])],
+        ["floodgate keyhole", "floodgate keyhole scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
         ["floodgate keyhole", "spool stump", False, lambda state: state.has("Floodgate Key", player)],
 
         ["spool stump", "d3 entrance", False, lambda state: oos_season_in_spool_swamp(state, player, SEASON_SUMMER)],
@@ -808,6 +809,7 @@ def make_holodrum_logic(player: int):
         ["suburbs", "samasa desert", False, lambda state: state.has("_met_pirates", player)],
         ["samasa desert", "samasa desert pit", False, lambda state: oos_has_bracelet(state, player)],
         ["samasa desert", "samasa desert chest", False, lambda state: oos_has_flippers(state, player)],
+        ["samasa desert", "samasa desert scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
 
         # TEMPLE REMAINS ####################################################################################
 

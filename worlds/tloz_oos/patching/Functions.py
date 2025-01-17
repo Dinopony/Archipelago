@@ -36,10 +36,7 @@ def write_chest_contents(rom: RomData, patch_data):
     This puts the item described in the patch data inside each chest in the game.
     """
     for location_name, location_data in LOCATIONS_DATA.items():
-        # Some very specific chests don't have the "COLLECT_CHEST" type but still are chests
-        is_special_chest = location_name in ["Sunken City: Chest in Master Diver's Cave",
-                                             "Explorer's Crypt (1F): Chest Behind Cracked Wall"]
-        if not is_special_chest and ('collect' not in location_data or location_data['collect'] != COLLECT_CHEST):
+        if location_data.get('collect', COLLECT_TOUCH) != COLLECT_CHEST and not location_data.get('is_chest', False):
             continue
         chest_addr = rom.get_chest_addr(location_data['room'])
         item = patch_data["locations"][location_name]
@@ -270,6 +267,12 @@ def define_option_constants(assembler: Z80Assembler, patch_data):
     master_keys_as_boss_keys = patch_data["options"]["master_keys"] == OracleOfSeasonsMasterKeys.option_all_dungeon_keys
     assembler.define_byte("option.smallKeySprite", 0x43 if master_keys_as_boss_keys else 0x42)
 
+    scrubs_all_refill = not patch_data["options"]["shuffle_business_scrubs"]
+    assembler.define_byte("var.spoolSwampScrubSubid", 0x04 if scrubs_all_refill else 0x00)
+    assembler.define_byte("var.samasaCaveScrubSubid", 0x04 if scrubs_all_refill else 0x01)
+    assembler.define_byte("var.d2ScrubSubid", 0x04 if scrubs_all_refill else 0x02)
+    assembler.define_byte("var.d4ScrubSubid", 0x04 if scrubs_all_refill else 0x03)
+
 
 def define_season_constants(assembler: Z80Assembler, patch_data):
     for region_name, season_byte in patch_data["default_seasons"].items():
@@ -475,14 +478,14 @@ def process_item_name_for_shop_text(item: Dict) -> List[int]:
 
 def define_text_constants(assembler: Z80Assembler, patch_data):
     # Holodrum shop slots
-    overworld_shops = [
+    OVERWORLD_SHOPS = [
         "Horon Village: Shop",
         "Horon Village: Member's Shop",
         "Sunken City: Syrup Shop",
         "Horon Village: Advance Shop"
     ]
 
-    for shop_name in overworld_shops:
+    for shop_name in OVERWORLD_SHOPS:
         for i in range(1, 4):
             location_name = f"{shop_name} #{i}"
             symbolic_name = LOCATIONS_DATA[location_name]["symbolic_name"]
@@ -509,6 +512,30 @@ def define_text_constants(assembler: Z80Assembler, patch_data):
         else:
             text_bytes.extend([0x09, 0x01, 0x0c, 0x08, 0x20, 0x02, 0x09, 0x2e, 0x01])  # "(number) Ore Chunks."
         assembler.add_floating_chunk(f"text.{symbolic_name}", text_bytes)
+
+    BUSINESS_SCRUBS = [
+        "Spool Swamp: Business Scrub",
+        "Samasa Desert: Business Scrub",
+        "Snake's Remains: Business Scrub",
+        "Dancing Dragon Dungeon (1F): Business Scrub"
+    ]
+    for location_name in BUSINESS_SCRUBS:
+        symbolic_name = LOCATIONS_DATA[location_name]["symbolic_name"]
+        if location_name not in patch_data["locations"]:
+            assembler.add_floating_chunk(f"text.{symbolic_name}", [])
+            assembler.define(f"text.{symbolic_name}Price", "$0000")
+            continue
+        # Scrub string asking the player if they want to buy the item
+        item_name_bytes = process_item_name_for_shop_text(patch_data["locations"][location_name])
+        text_bytes = [0x0e, 0xc6, 0x03, 0x79]  # \sfx(0xc6)Greetings!\n
+        text_bytes.extend([0x09, 0x01] + item_name_bytes + [0x03, 0xe2])  # (Item name)
+        text_bytes.extend([0x04, 0x91, 0x09, 0x04, 0x0c, 0x08])  # "for \green\num"
+        text_bytes.extend([0x02, 0x8f, 0x09, 0x00, 0x21, 0x01])  # " Rupees\white!\n"
+        text_bytes.extend([0x02, 0x00, 0x00])  # Yes / No
+        assembler.add_floating_chunk(f"text.{symbolic_name}", text_bytes)
+        # Price as BCD
+        price_as_string = str(patch_data["shop_prices"][symbolic_name])
+        assembler.define(f"text.{symbolic_name}Price", f"${price_as_string.zfill(4)}")
 
     assembler.add_floating_chunk("text.signGuyRequirementDigits",
                                  convert_value_to_digits(patch_data["options"]["sign_guy_requirement"]))
