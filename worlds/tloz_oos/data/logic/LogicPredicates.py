@@ -249,6 +249,9 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     # must-have to prevent any stupid lock
     if not oos_can_farm_rupees(state, player):
         return False
+    # In hard logic, having the shovel is equivalent to having an infinite amount of Rupees thanks to RNG manips
+    if oos_option_hard_logic(state, player) and oos_has_shovel(state, player):
+        return True
 
     rupees = state.count("Rupees (1)", player)
     rupees += state.count("Rupees (5)", player) * 5

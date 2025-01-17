@@ -288,10 +288,12 @@ def make_d4_logic(player: int):
             any([
                 oos_can_kill_stalfos(state, player),
                 all([
+                    # Kill Stalfos by using pots in the room
                     oos_option_medium_logic(state, player),
                     oos_has_bracelet(state, player)
                 ])
-            ])
+            ]),
+            oos_can_jump_2_wide_pit(state, player)
         ])],
 
         ["d4 stalfos stairs", "d4 terrace", False, None],
@@ -579,11 +581,11 @@ def make_d6_logic(player: int):
         ["enter d6", "d6 spinner north", False, lambda state: all([
             oos_can_break_crystal(state, player),
             oos_has_magnet_gloves(state, player),
+            oos_has_feather(state, player),
             any([
                 oos_has_small_keys(state, player, 6, 3),
                 all([
                     oos_has_small_keys(state, player, 6, 2),
-                    oos_has_feather(state, player),
                     oos_has_bombs(state, player)
                 ])
             ])
