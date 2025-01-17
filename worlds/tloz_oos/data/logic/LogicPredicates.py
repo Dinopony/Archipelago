@@ -705,7 +705,8 @@ def oos_can_push_enemy(state: CollectionState, player: int):
     ])
 
 
-def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available: bool = False, allow_gale_seeds: bool = False):
+def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available: bool = False,
+                              allow_gale_seeds: bool = True):
     # If a pit is avaiable nearby, it can be used to put the enemies inside using
     # items that are usually non-lethal
     if pit_available and oos_can_push_enemy(state, player):
