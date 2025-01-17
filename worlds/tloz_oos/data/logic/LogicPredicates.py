@@ -276,8 +276,7 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
 
 
 def oos_can_farm_rupees(state: CollectionState, player: int):
-    # Having Ember Seeds and a weapon or a shovel is enough to guarantee that we can reach
-    # a significant amount of rupees
+    # Having a sword or a shovel is enough to guarantee that we can reach a significant amount of rupees
     return oos_has_sword(state, player) or oos_has_shovel(state, player)
 
 

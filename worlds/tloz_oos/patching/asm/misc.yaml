@@ -10,11 +10,6 @@
     jp decHlRef16WithCap
 03/0d6b/: call skipCapcom
 
-# use different seed capacity table, so that level zero satchel can still
-# hold 20 seeds.
-3f//seedCapacityTable: |
-    db $20,$20,$50,$99
-
 # make link actionable as soon as he drops into the world.
 05/0d98/: jp setLinkIdOverride
 
@@ -92,6 +87,10 @@
 # you go up the stairs without magnet glove.
 15/0f62/: db $38
 
+# use different seed capacity table, so that level zero satchel can still
+# hold 20 seeds.
+3f//seedCapacityTable: |
+    db $20,$20,$50,$99
 3f/060d/: ld hl,seedCapacityTable
 
 # Remove whole Bipin & Blossom child mechanic
@@ -107,3 +106,8 @@
     call unsetGlobalFlag
     jp $2099 ; objectCenterOnTile
 05/0c90/: jp stopRosaDate
+
+# Forbid Maple from dropping Heart Piece or Gasha Seed
+# $14 $0e $0e $1e $20
+05/2988/: db $00,$00,$10,$20,$3e    # @rareItems
+05/2996/: db $00,$00,$04,$08,$0c    # @standardItems
