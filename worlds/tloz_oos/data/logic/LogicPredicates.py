@@ -702,7 +702,7 @@ def oos_can_push_enemy(state: CollectionState, player: int):
     ])
 
 
-def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available: bool = False):
+def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available: bool = False, allow_gale_seeds: bool = False):
     # If a pit is avaiable nearby, it can be used to put the enemies inside using
     # items that are usually non-lethal
     if pit_available and oos_can_push_enemy(state, player):
@@ -711,14 +711,14 @@ def oos_can_kill_normal_enemy(state: CollectionState, player: int, pit_available
     return any([
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
-        oos_can_kill_normal_using_satchel(state, player),
-        oos_can_kill_normal_using_slingshot(state, player),
+        oos_can_kill_normal_using_satchel(state, player, allow_gale_seeds),
+        oos_can_kill_normal_using_slingshot(state, player, allow_gale_seeds),
         (oos_option_medium_logic(state, player) and oos_has_bombs(state, player, 4)),
         oos_can_punch(state, player)
     ])
 
 
-def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
+def oos_can_kill_normal_using_satchel(state: CollectionState, player: int, allow_gale_seeds: bool = True):
     # Expect a 50+ seed satchel to ensure we can chain dungeon rooms to some extent if that's our only kill option
     if not oos_has_satchel(state, player, 2):
         return False
@@ -733,6 +733,7 @@ def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
                 oos_has_scent_seeds(state, player),
                 oos_has_mystery_seeds(state, player),
                 all([
+                    allow_gale_seeds,
                     oos_has_gale_seeds(state, player),
                     oos_has_feather(state, player)
                 ])
@@ -740,13 +741,14 @@ def oos_can_kill_normal_using_satchel(state: CollectionState, player: int):
         ]),
         all([
             # Hard logic => allow gale without feather
+            allow_gale_seeds,
             oos_option_hard_logic(state, player),
             oos_has_gale_seeds(state, player)
         ])
     ])
 
 
-def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int):
+def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int, allow_gale_seeds: bool = True):
     # Expect a 50+ seed satchel to ensure we can chain dungeon rooms to some extent if that's our only kill option
     if not oos_has_satchel(state, player, 2):
         return False
@@ -759,6 +761,7 @@ def oos_can_kill_normal_using_slingshot(state: CollectionState, player: int):
             all([
                 oos_option_medium_logic(state, player),
                 any([
+                    allow_gale_seeds,
                     oos_has_mystery_seeds(state, player),
                     oos_has_gale_seeds(state, player),
                 ])
@@ -922,7 +925,7 @@ def oos_can_remove_rockslide(state: CollectionState, player: int, can_summon_com
 
 
 def oos_can_meet_maple(state: CollectionState, player: int):
-    return oos_can_kill_normal_enemy(state, player)
+    return oos_can_kill_normal_enemy(state, player, False, False)
 
 
 # Season in region predicates ##########################################
