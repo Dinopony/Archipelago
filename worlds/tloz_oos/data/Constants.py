@@ -78,7 +78,7 @@ JEWELS = [
 ]
 
 VALID_RUPEE_VALUES = [
-    0, 1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 200, 300, 400, 500, 900, 999
+    0, 1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 150, 200, 300, 400, 500, 900, 999
 ]
 
 DEFAULT_SEASONS = {
@@ -173,27 +173,34 @@ SUBROSIA_HIDDEN_DIGGING_SPOTS_LOCATIONS = [
 
 SAMASA_GATE_CODE = [2, 2, 1, 0, 0, 3, 3, 3]
 
-SHOP_PRICES_DIVIDERS = {
-    "horonShop1": 1.5,
-    "horonShop2": 1.5,
-    "horonShop3": 1.5,
-    "memberShop1": 1,
-    "memberShop2": 1,
-    "memberShop3": 1,
-    "advanceShop1": 1.25,
-    "advanceShop2": 1.25,
-    "advanceShop3": 1.25,
-    "syrupShop1": 1,
-    "syrupShop2": 1,
-    "syrupShop3": 1,
-    "subrosianMarket2": 1.5,
-    "subrosianMarket3": 1.5,
-    "subrosianMarket4": 1.5,
-    "subrosianMarket5": 1.5,
-    "spoolSwampScrub": 1.5,
-    "samasaCaveScrub": 1.5,
-    "d2Scrub": 1.5,
-    "d4Scrub": 1.5,
+AVERAGE_PRICE_PER_LOCATION = {
+    "cheap": 50,
+    "reasonable": 100,
+    "expensive": 200,
+    "outrageous": 350
+}
+
+VANILLA_SHOP_PRICES = {
+    "horonShop1": 20,
+    "horonShop2": 30,
+    "horonShop3": 150,
+    "memberShop1": 300,
+    "memberShop2": 300,
+    "memberShop3": 200,
+    "advanceShop1": 100,
+    "advanceShop2": 100,
+    "advanceShop3": 100,
+    "syrupShop1": 100,
+    "syrupShop2": 300,
+    "syrupShop3": 300,
+    "subrosianMarket2": 30,
+    "subrosianMarket3": 40,
+    "subrosianMarket4": 50,
+    "subrosianMarket5": 60,
+    "spoolSwampScrub": 100,
+    "samasaCaveScrub": 100,
+    "d2Scrub": 30,
+    "d4Scrub": 20,
 }
 
 ITEM_GROUPS = {

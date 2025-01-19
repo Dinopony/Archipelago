@@ -396,17 +396,26 @@ class OracleOfSeasonsRingQuality(DefaultOnToggle):
     display_name = "Remove Useless Rings"
 
 
-class OracleOfSeasonsPricesFactor(Range):
+class OracleOfSeasonsShopPrices(Choice):
     """
-    A factor (expressed as percentage) that will be applied to all prices inside all shops in the game.
-    - Setting it at 10% will make all items almost free
-    - Setting it at 500% will make all items horrendously expensive, use at your own risk!
+    Determine the cost of items found in shops of all sorts (including Subrosian Market and Business Scrubs):
+    - Vanilla: shop items have the same cost as in the base game
+    - Free: all shop items can be obtained for free
+    - Cheap: shop prices are randomized with an average cost of 50 Rupees
+    - Reasonable: shop prices are randomized with an average cost of 100 Rupees
+    - Expensive: shop prices are randomized with an average cost of 200 Rupees
+    - Outrageous: shop prices are randomized with an average cost of 350 Rupees
     """
-    display_name = "Prices Factor (%)"
+    display_name = "Shop Prices"
 
-    range_start = 10
-    range_end = 500
-    default = 100
+    option_vanilla = 0
+    option_free = 1
+    option_cheap = 2
+    option_reasonable = 3
+    option_expensive = 4
+    option_outrageous = 5
+
+    default = 0
 
 
 class OracleOfSeasonsAdvanceShop(Toggle):
@@ -548,7 +557,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     samasa_gate_code_length: OracleOfSeasonsSamasaGateCodeLength
 
     # Miscellaneous options
-    shop_prices_factor: OracleOfSeasonsPricesFactor
+    shop_prices: OracleOfSeasonsShopPrices
     enforce_potion_in_shop: OracleOfSeasonsEnforcePotionInShop
     remove_useless_rings: OracleOfSeasonsRingQuality
     fools_ore: OracleOfSeasonsFoolsOre

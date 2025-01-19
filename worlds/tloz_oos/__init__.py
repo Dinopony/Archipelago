@@ -114,7 +114,7 @@ class OracleOfSeasonsWorld(World):
         self.lost_woods_main_sequence: List[List] = LOST_WOODS_MAIN_SEQUENCE.copy()
         self.old_man_rupee_values: Dict[str, int] = OLD_MAN_RUPEE_VALUES.copy()
         self.samasa_gate_code: List[int] = SAMASA_GATE_CODE.copy()
-        self.shop_prices: Dict[str, int] = SHOP_PRICES_DIVIDERS.copy()
+        self.shop_prices: Dict[str, int] = VANILLA_SHOP_PRICES.copy()
         self.essences_in_game: List[str] = ESSENCES.copy()
         self.random_rings_pool: List[str] = []
         self.remaining_progressive_gasha_seeds = 0
@@ -301,18 +301,24 @@ class OracleOfSeasonsWorld(World):
                 self.old_man_rupee_values[key] = self.random.choice(get_old_man_values_pool())
 
     def randomize_shop_prices(self):
-        prices_pool = get_prices_pool()
-        self.random.shuffle(prices_pool)
-        global_prices_factor = self.options.shop_prices_factor.value / 100.0
-        for key, divider in self.shop_prices.items():
-            if key == "horonShop3" and self.options.enforce_potion_in_shop:
-                floating_price = 300 * global_prices_factor / divider
-            else:
-                floating_price = prices_pool.pop() * global_prices_factor / divider
-            for i, value in enumerate(VALID_RUPEE_VALUES):
-                if value > floating_price:
-                    self.shop_prices[key] = VALID_RUPEE_VALUES[i]
-                    break
+        if self.options.shop_prices == "vanilla":
+            return
+        if self.options.shop_prices == "free":
+            self.shop_prices = {k: 0 for k in self.shop_prices}
+            return
+
+        # Prices are randomized, get a random price that follow set options for each shop location.
+        # Values must be rounded to nearest valid rupee amount.
+        average = AVERAGE_PRICE_PER_LOCATION[self.options.shop_prices.current_key]
+        for k in self.shop_prices:
+            # Normal distribution
+            #       50 => [25; 75 ~> 70]      μ=50  σ=8
+            #       100 => [50; 150]          μ=100 σ=16
+            #       200 => [100; 300]         μ=200 σ=32
+            #       350 => [175; 525 ~> 500]  μ=350 σ=56
+            deviation = 20 * (average / 50)
+            value = self.random.gauss(average, deviation)
+            self.shop_prices[k] = min(VALID_RUPEE_VALUES, key=lambda x: abs(x - value))
 
     def create_random_rings_pool(self):
         # Get a subset of as many rings as needed, with a potential filter on quality depending on chosen options
