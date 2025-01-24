@@ -214,6 +214,9 @@
 # This way, we can reuse the "@specialCode0" to handle dynamic names for Subrosian Portals
 02/2ae2/: db $17
 
+# Remove the portal icon from room $AA because... it doesn't have one?
+02/2bdf/: db $9a
+
 # Stop calling func_6e06 to set portal bit when it is spawned
 15/2dfb/: |
     nop
