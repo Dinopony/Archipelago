@@ -52,11 +52,10 @@
 # Call giveTreasureCustom instead of giveTreasure for shop slots, and also
 # set the flag related to that shop item so it can't be bought again
 08//shopGiveTreasure: |
-    push bc
-    push hl
-
+    ; Give the treasure as you might expect when buying the item from the shopkeeper
     call giveTreasureCustom
 
+    ; Also set the appropriate flag to mark the item as bought 
     ld e,$42
     ld a,(de)    ; interaction subid
     ld hl,shopItemReplacementTable
@@ -64,23 +63,20 @@
     rst 18       ; rst_addDoubleIndex
     inc hl
     ldd a,(hl)    ; bitmask -> a
-    or a
-    jr z,@done    
-    
     ld l,(hl)   ; flag_addr -> l
     ld h,$c6
     or (hl)     ; bitmask | flag_value -> a
     ld (hl),a   ; store flag_value with added bit
-
-    @done:
-    pop hl
-    pop bc
-
+    ret
+# In shopItemState3, replace giveTreasure by a call to the function above, and also overwrite the next few instructions
+# which are a seed refill when buying a specific shop item in Member Shop (which we don't want in rando!)
+08/0bfb/: |
     push de
+    call shopGiveTreasure
     call saveFile
     pop de
-    ret
-08/0bfb/: call shopGiveTreasure
+    nop
+    nop
 
 
 ### HORON SHOP #####################################################################
@@ -101,16 +97,6 @@
 # Don't set a ricky flag when buying 150-rupee shop item.
 # This has become useless since we randomize the cheap item instead of the special Flute replacement
 # 0b/0823/: db ormemory; dw wRickyState; db 00
-
-
-### MEMBER'S SHOP ##################################################################
-
-# don't refill seeds when getting the first member's shop item.
-08/0c02/: |
-    nop
-    nop
-    nop
-
 
 ### ADVANCE SHOP ###################################################################
 
