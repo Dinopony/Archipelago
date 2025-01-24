@@ -78,35 +78,30 @@
 
 ##### SUBROSIA SEASIDE ########################################
 
-# check room flags to determine whether to create star ore instead of
-# whatever global flag 0e is. this also fixes a vanilla bug causing star ore
-# to be infinitely rediggable (but only when the first screen is rolled? or
-# that getting it on the first screen doesn't count? something).
+# Replace the check for GLOBALFLAG_STAR_ORE_FOUND by a check which tests treasure collection flags on all 4 seaside rooms
 08//starOreRooms: db $65,$66,$75,$76,$ff
 08//checkBeachItemObtained: |
     ld de,starOreRooms
     ld h,$c8
-    call scanItemGetFlagsForMaps
-    ret
-08/22a7/: |  # Replace "checkGlobalFlag" on GLOBALFLAG_STAR_ORE_FOUND
+    jp scanItemGetFlagsForMaps
+
+08/22a5/: |  # Replace "checkGlobalFlag" on GLOBALFLAG_STAR_ORE_FOUND
     push de
     call checkBeachItemObtained
     pop de
-    ret nz
 08/22fd/: |  # Replace "call checkTreasureObtained"
     push de
     call checkBeachItemObtained
     pop de
     db $20  ; Replace "jr c" by "jr nz"
 
-# Vanilla Star Ore location doesn't set a subid, so we need to extend this to allow for items with a subid
-08//setStarOreIds: |
-    inc l
-    ld (hl),locations.subrosiaSeaside.id
-    inc l
-    ld (hl),locations.subrosiaSeaside.subid
-    ret
-08/22f2/: call setStarOreIds
+# Star Ore item doesn't get a subid in vanilla game, we need to optimize that procedure to be able to set one
+08/22ec/: |
+    push bc
+    ld bc,locations.subrosiaSeaside
+    call createTreasure
+    pop bc
+    nop
 
 
 ##### BOMB FLOWER ############################################
