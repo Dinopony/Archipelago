@@ -172,12 +172,6 @@
     ld a,b
     jp giveTreasure
 
-# just gives the treasure, no sound or text.
-00//giveTreasureCustomSilent: |
-    call giveTreasureCustom_body
-    xor a
-    ret
-
 # gives the treasure, plays its sound, and shows its text.
 00//giveTreasureCustom: |
     call giveTreasureCustom_body

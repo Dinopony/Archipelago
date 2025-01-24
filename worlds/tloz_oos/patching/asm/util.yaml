@@ -7,19 +7,6 @@
     cp b
     ret
 
-# returns the byte at e:hl into e.
-00//readByte: |
-    ldh a,(hRomBank)
-    push af
-    ld a,e
-    ldh (hRomBank),a
-    ld ($2222),a
-    ld e,(hl)
-    pop af
-    ldh (hRomBank),a
-    ld ($2222),a
-    ret
-
 # searches for a value in a table starting at hl, with an entry matching
 # keys b and subkey c, and values e bytes long. sets c if found. a key of
 # ff ends the table.
