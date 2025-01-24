@@ -17,10 +17,6 @@
 11/32b7/: db var.d2ScrubSubid          # option.randomizeScrubs ? $02 : $04
 11/3480/: db var.d4ScrubSubid          # option.randomizeScrubs ? $03 : $04
 
-# Scrub below Moosh in Mt. Cucco is unreachable, but set it to "refill" mode
-# just in case
-11/299d/: db $04
-
 # In vanilla, falling into a Samasa Desert quicksand has 1/2 chance of leading you into a Business Scrub cave or in
 # a cave filled with Like-Likes. Going to that cave through stairs always gives the Like-Like variant.
 # This patch makes it mandatory to fall in the scrub variant from quicksands (while stairs still lead to Like-Likes)
