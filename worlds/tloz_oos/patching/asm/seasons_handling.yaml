@@ -98,57 +98,37 @@
 # Allow for a "quick-switch" to a specific season if the player is holding a specific
 # diagonal during the season transition. This diagonal matches the season icon layout
 # displayed next to the Rod of Seasons in the game top bar.
-14//smartSeasonSwitch_body: |
-    ld a,(wKeysPressed)
-    ld b,a
-    
-    ; NW => summer
-    ld a,BTN_UP | BTN_LEFT
-    and b
-    cp BTN_UP | BTN_LEFT
-    jr nz,@testNE
-    ld b,SEASON_SPRING  ; Make it as if current season was spring to try switching to summer
-    ret
-    
-    ; NE => autumn
-    @testNE:
-    ld a,BTN_UP | BTN_RIGHT
-    and b
-    cp BTN_UP | BTN_RIGHT
-    jr nz,@testSE
-    ld b,SEASON_SUMMER  ; Make it as if current season was summer to try switching to autumn
-    ret
-    
-    ; SE => winter
-    @testSE:
-    ld a,BTN_DOWN | BTN_RIGHT
-    and b
-    cp BTN_DOWN | BTN_RIGHT
-    jr nz,@testSW
-    ld b,SEASON_AUTUMN  ; Make it as if current season was autumn to try switching to winter
-    ret
-    
-    ; SW => spring
-    @testSW:
-    ld a,BTN_DOWN | BTN_LEFT
-    and b
-    cp BTN_DOWN | BTN_LEFT
-    jr nz,@vanillaCycle
-    ld b,SEASON_WINTER  ; Make it as if current season was winter to try switching to spring
-    ret
-    
-    ; No special input, use the real current season to deduce next season
-    @vanillaCycle:
-    ld a,(wRoomStateModifier)
-    ld b,a
-    ret
+08//smartSeasonSwitchTable: |
+    db BTN_UP   | BTN_LEFT   ; shortcut to fake spring as current season -> summer
+    db BTN_UP   | BTN_RIGHT  ; shortcut to fake summer as current season -> autumn
+    db BTN_DOWN | BTN_RIGHT  ; shortcut to fake autumn as current season -> winter
+    db BTN_DOWN | BTN_LEFT   ; shortcut to fake winter as current season -> spring
 08//smartSeasonSwitch: |
     push hl
-    ld e,$14
-    ld hl,smartSeasonSwitch_body
-    call interBankCall
+    ld hl,smartSeasonSwitchTable+3
+    ld b,$04              ; Loop counter -> [b]
+    
+    @tableLoop:
+    ld a,(wKeysPressed)   ; Currently pressed keys -> [a]
+    ; If all keys from the keymask are pressed, use the season defined in second byte
+    ; of array as current season to switch to the next one
+    and (hl)              ; if(currently_pressed_keys & key_mask == key_mask)
+    cp (hl)               ; ^^^^^
+    jr z,@found
+    ; Some or all keys weren't pressed, check next key combination
+    dec hl
+    dec b                 ; loop if [b] > 0
+    jr nz,@tableLoop      ; ^^^^^
+    
+    ; None of the key combos was used, perform a basic season cycle like in vanilla
+    ld a,(wRoomStateModifier)
     pop hl
-    ld a,b
     ret
-# Inject this in place of "ld a,(wRoomStateModifier)" inside interactionCode15 (INTERACID_USED_ROD_OF_SEASONS)
+    
+    @found:
+    dec b                 ; loop counter is (fake_season_id + 1)
+    ld a,b                ; return a fake current season -> [a]
+    pop hl
+    ret
+# Replace "ld a,(wRoomStateModifier)" by a call to this function inside interactionCode15 (INTERACID_USED_ROD_OF_SEASONS)
 08/114f/: call smartSeasonSwitch
