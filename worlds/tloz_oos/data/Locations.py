@@ -1993,6 +1993,7 @@ LOCATIONS_DATA = {
     },
     "Horon Village: Item Inside Maku Tree (3+ Essences)": {
         "region_id": "maku tree, 3 essences",
+        "conditional": True,
         "flag_byte": 0xc9e9,
         "vanilla_item": "Gasha Seed",
         "room": 0x04e9,
@@ -2002,6 +2003,7 @@ LOCATIONS_DATA = {
     },
     "Horon Village: Item Inside Maku Tree (5+ Essences)": {
         "region_id": "maku tree, 5 essences",
+        "conditional": True,
         "flag_byte": 0xc9ea,
         "vanilla_item": "Gasha Seed",
         "room": 0x04ea,
@@ -2011,6 +2013,7 @@ LOCATIONS_DATA = {
     },
     "Horon Village: Item Inside Maku Tree (7+ Essences)": {
         "region_id": "maku tree, 7 essences",
+        "conditional": True,
         "flag_byte": 0xc9ee,
         "vanilla_item": "Gasha Seed",
         "room": 0x04ee,
