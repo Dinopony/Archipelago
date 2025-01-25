@@ -1,4 +1,4 @@
-VERSION = "7.2"
+VERSION = "8.0"
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 
 DIRECTION_UP = 0
@@ -77,9 +77,13 @@ JEWELS = [
    "X-Shaped Jewel"
 ]
 
-VALID_RUPEE_VALUES = [
-    0, 1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 150, 200, 300, 400, 500, 900, 999
+VALID_RUPEE_PRICE_VALUES = [
+    1, 2, 5, 10, 20, 25, 30, 40, 50, 60, 70, 80, 100, 150, 200, 300, 400, 500, 900, 999
 ]
+VALID_RUPEE_ITEM_VALUES = [
+    1, 5, 10, 20, 30, 50, 100, 200
+]
+MARKET_LOCATIONS = ["subrosianMarket2", "subrosianMarket3", "subrosianMarket4", "subrosianMarket5"]
 
 DEFAULT_SEASONS = {
     "EYEGLASS_LAKE": SEASON_WINTER,

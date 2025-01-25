@@ -52,11 +52,13 @@ def make_holodrum_logic(player: int):
 
         ["horon village", "horon village tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
-        ["horon village", "horon shop", False, lambda state: oos_has_rupees(state, player, 150)],
-        ["horon village", "advance shop", False, lambda state: oos_has_rupees(state, player, 300)],
+        ["horon village", "horon shop", False, lambda state:
+            oos_has_rupees_for_shop(state, player, "horonShop")],
+        ["horon village", "advance shop", False, lambda state:
+            oos_has_rupees_for_shop(state, player, "advanceShop")],
         ["horon village", "member's shop", False, lambda state: all([
             state.has("Member's Card", player),
-            oos_has_rupees(state, player, 450)
+            oos_has_rupees_for_shop(state, player, "memberShop")
         ])],
 
         # WESTERN COAST ##############################################################################################
@@ -447,7 +449,8 @@ def make_holodrum_logic(player: int):
             ]),
             oos_has_bracelet(state, player)
         ])],
-        ["floodgate keyhole", "floodgate keyhole scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
+        ["floodgate keyhole", "spool swamp scrub", False, lambda state:
+            oos_has_rupees_for_shop(state, player, "spoolSwampScrub")],
         ["floodgate keyhole", "spool stump", False, lambda state: state.has("Floodgate Key", player)],
 
         ["spool stump", "d3 entrance", False, lambda state: oos_season_in_spool_swamp(state, player, SEASON_SUMMER)],
@@ -639,7 +642,8 @@ def make_holodrum_logic(player: int):
             ]),
             state.has("Mushroom", player)
         ])],
-        ["syrup trade", "syrup shop", False, lambda state: oos_has_rupees(state, player, 500)],
+        ["syrup trade", "syrup shop", False, lambda state:
+            oos_has_rupees_for_shop(state, player, "syrupShop")],
 
         # Use Dimitri to get the tree seeds, using dimitri to get seeds being medium difficulty
         ["sunken city dimitri", "sunken city tree", False,lambda state: all([
@@ -809,7 +813,8 @@ def make_holodrum_logic(player: int):
         ["suburbs", "samasa desert", False, lambda state: state.has("_met_pirates", player)],
         ["samasa desert", "samasa desert pit", False, lambda state: oos_has_bracelet(state, player)],
         ["samasa desert", "samasa desert chest", False, lambda state: oos_has_flippers(state, player)],
-        ["samasa desert", "samasa desert scrub", False, lambda state: oos_can_pay_business_scrub(state, player)],
+        ["samasa desert", "samasa desert scrub", False, lambda state:
+            oos_has_rupees_for_shop(state, player, "samasaCaveScrub")],
 
         # TEMPLE REMAINS ####################################################################################
 

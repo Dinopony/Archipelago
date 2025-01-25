@@ -2198,7 +2198,7 @@ LOCATIONS_DATA = {
         "room": [],
     },
     "Spool Swamp: Business Scrub": {
-        "region_id": "floodgate keyhole scrub",
+        "region_id": "spool swamp scrub",
         "vanilla_item": "Filler Item",
         "conditional": True,
         "flag_byte": 0xc63f,
@@ -2222,7 +2222,7 @@ LOCATIONS_DATA = {
         "symbolic_name": "samasaCaveScrub",
     },
     "Snake's Remains: Business Scrub": {
-        "region_id": "d2 alt entrances scrub",
+        "region_id": "d2 scrub",
         "vanilla_item": "Filler Item",
         "conditional": True,
         "dungeon": 2,
@@ -2235,7 +2235,7 @@ LOCATIONS_DATA = {
         "symbolic_name": "d2Scrub",
     },
     "Dancing Dragon Dungeon (1F): Business Scrub": {
-        "region_id": "d4 terrace scrub",
+        "region_id": "d4 scrub",
         "vanilla_item": "Filler Item",
         "conditional": True,
         "dungeon": 4,

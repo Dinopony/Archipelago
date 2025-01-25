@@ -245,8 +245,7 @@ def oos_can_beat_required_golden_beasts(state: CollectionState, player: int):
 # Various item predicates ###########################################
 
 def oos_has_rupees(state: CollectionState, player: int, amount: int):
-    # Rupee checks being quite approximative, being able to farm is a
-    # must-have to prevent any stupid lock
+    # Rupee checks being quite approximative, being able to farm is a must-have to prevent any stupid lock
     if not oos_can_farm_rupees(state, player):
         return False
     # In hard logic, having the shovel is equivalent to having an infinite amount of Rupees thanks to RNG manips
@@ -278,13 +277,17 @@ def oos_has_rupees(state: CollectionState, player: int, amount: int):
     return rupees >= amount
 
 
+def oos_has_rupees_for_shop(state: CollectionState, player: int, shop_name: str):
+    world = state.multiworld.worlds[player]
+    required_rupees = world.shop_rupee_requirements.get(shop_name, 0)
+    # In shops, players are expected to buy at most 50% of items (in the vast majority of seeds).
+    # For edge cases, the logic ensures player is able to farm to compensate for the missing rupees.
+    return oos_has_rupees(state, player, int(required_rupees * 0.50))
+
+
 def oos_can_farm_rupees(state: CollectionState, player: int):
     # Having a sword or a shovel is enough to guarantee that we can reach a significant amount of rupees
     return oos_has_sword(state, player) or oos_has_shovel(state, player)
-
-
-def oos_can_pay_business_scrub(state: CollectionState, player: int):
-    return oos_has_rupees(state, player, 150)
 
 
 def oos_has_ore_chunks(state: CollectionState, player: int, amount: int):
@@ -300,6 +303,14 @@ def oos_has_ore_chunks(state: CollectionState, player: int, amount: int):
     ore_chunks += state.count("Ore Chunks (25)", player) * 25
     ore_chunks += state.count("Ore Chunks (50)", player) * 50
     return ore_chunks >= amount
+
+
+def oos_can_buy_market(state: CollectionState, player: int):
+    world = state.multiworld.worlds[player]
+    total_market_price = sum([world.shop_prices[loc] for loc in MARKET_LOCATIONS])
+    # In shops, players are expected to buy at most 50% of items (in the vast majority of seeds).
+    # For edge cases, the logic ensures player is able to farm to compensate for the missing ore.
+    return oos_has_ore_chunks(state, player, int(total_market_price * 0.50))
 
 
 def oos_can_farm_ore_chunks(state: CollectionState, player: int):
@@ -334,7 +345,6 @@ def oos_can_trigger_far_switch(state: CollectionState, player: int):
             oos_has_sword(state, player, False),
             state.has("Energy Ring", player)
         ])
-        # TODO: Regular beams?
     ])
 
 
@@ -827,7 +837,6 @@ def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
         oos_has_boomerang(state, player),
         oos_has_rod(state, player),
 
-        # TODO: Test that to ensure our understanding is right
         oos_can_use_scent_seeds(state, player),
         oos_can_use_mystery_seeds(state, player),
         oos_has_slingshot(state, player),  # any seed works using slingshot

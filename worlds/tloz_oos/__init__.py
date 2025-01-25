@@ -91,7 +91,7 @@ class OracleOfSeasonsWorld(World):
     game = "The Legend of Zelda - Oracle of Seasons"
     options_dataclass = OracleOfSeasonsOptions
     options: OracleOfSeasonsOptions
-    required_client_version = (0, 5, 0)
+    required_client_version = (0, 5, 1)
     web = OracleOfSeasonsWeb()
     topology_present = True
 
@@ -115,6 +115,8 @@ class OracleOfSeasonsWorld(World):
         self.old_man_rupee_values: Dict[str, int] = OLD_MAN_RUPEE_VALUES.copy()
         self.samasa_gate_code: List[int] = SAMASA_GATE_CODE.copy()
         self.shop_prices: Dict[str, int] = VANILLA_SHOP_PRICES.copy()
+        self.shop_order: List[List[str]] = []
+        self.shop_rupee_requirements: Dict[str, int] = {}
         self.essences_in_game: List[str] = ESSENCES.copy()
         self.random_rings_pool: List[str] = []
         self.remaining_progressive_gasha_seeds = 0
@@ -158,7 +160,10 @@ class OracleOfSeasonsWorld(World):
             for i in range(self.options.samasa_gate_code_length.value):
                 self.samasa_gate_code.append(self.random.randint(0, 3))
 
+        self.randomize_shop_order()
         self.randomize_shop_prices()
+        self.compute_rupee_requirements()
+
         self.create_random_rings_pool()
 
     def pick_essences_in_game(self):
@@ -303,6 +308,18 @@ class OracleOfSeasonsWorld(World):
             for key in self.old_man_rupee_values.keys():
                 self.old_man_rupee_values[key] = self.random.choice(get_old_man_values_pool())
 
+    def randomize_shop_order(self):
+        self.shop_order = [
+            ["horonShop1", "horonShop2", "horonShop3"],
+            ["memberShop1", "memberShop2", "memberShop3"],
+            ["syrupShop1", "syrupShop2", "syrupShop3"]
+        ]
+        if self.options.advance_shop:
+            self.shop_order.append(["advanceShop1", "advanceShop2", "advanceShop3"])
+        if self.options.shuffle_business_scrubs:
+            self.shop_order.extend([["spoolSwampScrub"], ["samasaCaveScrub"], ["d2Scrub"], ["d4Scrub"]])
+        self.random.shuffle(self.shop_order)
+
     def randomize_shop_prices(self):
         if self.options.shop_prices == "vanilla":
             return
@@ -315,13 +332,31 @@ class OracleOfSeasonsWorld(World):
         average = AVERAGE_PRICE_PER_LOCATION[self.options.shop_prices.current_key]
         for k in self.shop_prices:
             # Normal distribution
-            #       50 => [25; 75 ~> 70]      μ=50  σ=8
-            #       100 => [50; 150]          μ=100 σ=16
-            #       200 => [100; 300]         μ=200 σ=32
-            #       350 => [175; 525 ~> 500]  μ=350 σ=56
-            deviation = 20 * (average / 50)
-            value = self.random.gauss(average, deviation)
-            self.shop_prices[k] = min(VALID_RUPEE_VALUES, key=lambda x: abs(x - value))
+            #       50 => [25; 75 ~> 70]      μ=50  σ=19
+            #       100 => [50; 150]          μ=100 σ=38
+            #       200 => [100; 300]         μ=200 σ=76
+            #       350 => [175; 525 ~> 500]  μ=350 σ=133
+            value = self.random.gauss(average, 19 * (average / 50))
+            if k.startswith("subrosia"):
+                value *= 0.5  # Subrosia Market items are 2x cheaper since Ore Chunks are rarer
+            self.shop_prices[k] = min(VALID_RUPEE_PRICE_VALUES, key=lambda x: abs(x - value))
+
+    def compute_rupee_requirements(self):
+        # Compute global rupee requirements for each shop, based on shop order and item prices
+        cumulated_requirement = 0
+        for shop in self.shop_order:
+            if shop[0].startswith("advance") and not self.options.advance_shop:
+                continue
+            if shop[0].endswith("Scrub") and not self.options.shuffle_business_scrubs:
+                continue
+            # Add the price of each shop location in there to the requirement
+            for shop_location in shop:
+                cumulated_requirement += self.shop_prices[shop_location]
+            # Deduce the shop name from the code of the first location
+            shop_name = shop[0]
+            if not shop_name.endswith("Scrub"):
+                shop_name = shop_name[:-1]
+            self.shop_rupee_requirements[shop_name] = cumulated_requirement
 
     def create_random_rings_pool(self):
         # Get a subset of as many rings as needed, with a potential filter on quality depending on chosen options
@@ -474,8 +509,14 @@ class OracleOfSeasonsWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
+        # If item name has a "!PROG" suffix, force it to be progression. This is typically used to create the right
+        # amount of progression rupees while keeping them a filler item as default
+        if name.endswith("!PROG"):
+            name = name.removesuffix("!PROG")
+            classification = ItemClassification.progression_skip_balancing
+        else:
+            classification = ITEMS_DATA[name]["classification"]
         ap_code = self.item_name_to_id[name]
-        classification = ITEMS_DATA[name]["classification"]
 
         # A few items become progression only in hard logic
         progression_items_in_hard_logic = ["Expert's Ring", "Fist Ring", "Swimmer's Ring"]
@@ -492,6 +533,7 @@ class OracleOfSeasonsWorld(World):
         removed_item_quantities = self.options.remove_items_from_pool.value.copy()
         item_pool_dict = {}
         filler_item_count = 0
+        rupee_item_count = 0
         for loc_name, loc_data in LOCATIONS_DATA.items():
             if not self.location_is_active(loc_name, loc_data):
                 continue
@@ -508,6 +550,9 @@ class OracleOfSeasonsWorld(World):
                 continue
             if item_name == "Filler Item":
                 filler_item_count += 1
+                continue
+            if item_name.startswith("Rupees ("):
+                rupee_item_count += 1
                 continue
             if self.options.master_keys != OracleOfSeasonsMasterKeys.option_disabled and "Small Key" in item_name:
                 # Small Keys don't exist if Master Keys are set to replace them
@@ -541,6 +586,8 @@ class OracleOfSeasonsWorld(World):
             for small_key_name in ITEM_GROUPS["Master Keys"]:
                 item_pool_dict[small_key_name] = 1
                 filler_item_count -= 1
+
+        item_pool_dict.update(self.build_rupee_item_dict(rupee_item_count))
 
         # Add as many filler items as required
         for _ in range(filler_item_count):
@@ -578,6 +625,20 @@ class OracleOfSeasonsWorld(World):
             del item_pool_dict["Random Ring"]
 
         return item_pool_dict
+
+    def build_rupee_item_dict(self, rupee_item_count: int):
+        total_cost = max(self.shop_rupee_requirements.values())
+        average_rupee_value = total_cost / rupee_item_count
+        deviation = average_rupee_value / 2.5
+
+        rupee_item_dict = {}
+        for i in range(0, rupee_item_count):
+            value = self.random.gauss(average_rupee_value, deviation)
+            value = min(VALID_RUPEE_ITEM_VALUES, key=lambda x: abs(x - value))
+            # Put a "!PROG" suffix to force them to be created as progression items (see `create_item`)
+            item_name = f"Rupees ({value})!PROG"
+            rupee_item_dict[item_name] = rupee_item_dict.get(item_name, 0) + 1
+        return rupee_item_dict
 
     def create_items(self):
         item_pool_dict = self.build_item_pool_dict()
@@ -758,3 +819,16 @@ class OracleOfSeasonsWorld(World):
             spoiler_handle.write(f"\nSubrosia Portals ({self.multiworld.player_name[self.player]}):\n")
             for portal_holo, portal_sub in self.portal_connections.items():
                 spoiler_handle.write(f"\t- {portal_holo} --> {portal_sub}\n")
+
+        spoiler_handle.write(f"\nShop Prices ({self.multiworld.player_name[self.player]}):\n")
+        shop_codes = [code for shop in self.shop_order for code in shop]
+        shop_codes.extend(MARKET_LOCATIONS)
+        for shop_code in shop_codes:
+            price = self.shop_prices[shop_code]
+            for loc_name, loc_data in LOCATIONS_DATA.items():
+                if loc_data.get("symbolic_name", None) is None or loc_data["symbolic_name"] != shop_code:
+                    continue
+                if self.location_is_active(loc_name, loc_data):
+                    currency = "Ore Chunks" if shop_code.startswith("subrosia") else "Rupees"
+                    spoiler_handle.write(f"\t- {loc_name}: {price} {currency}\n")
+                break
