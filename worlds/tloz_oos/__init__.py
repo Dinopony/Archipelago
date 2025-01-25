@@ -123,6 +123,9 @@ class OracleOfSeasonsWorld(World):
         self.remaining_progressive_gasha_seeds = self.options.deterministic_gasha_locations.value
 
         self.pick_essences_in_game()
+        if len(self.essences_in_game) < self.options.treehouse_old_man_requirement:
+            self.options.treehouse_old_man_requirement.value = len(self.essences_in_game)
+
         self.restrict_non_local_items()
         self.randomize_default_seasons()
         self.randomize_old_men()
@@ -347,6 +350,12 @@ class OracleOfSeasonsWorld(World):
             return not self.options.enforce_potion_in_shop
         if location_name.startswith("Gasha Nut #"):
             return int(location_name[11:]) <= self.options.deterministic_gasha_locations
+        if location_name == "Horon Village: Item Inside Maku Tree (3+ Essences)":
+            return len(self.essences_in_game) >= 3
+        if location_name == "Horon Village: Item Inside Maku Tree (5+ Essences)":
+            return len(self.essences_in_game) >= 5
+        if location_name == "Horon Village: Item Inside Maku Tree (7+ Essences)":
+            return len(self.essences_in_game) >= 7
         return False
 
     def create_location(self, region_name: str, location_name: str, local: bool):
@@ -436,11 +445,11 @@ class OracleOfSeasonsWorld(World):
         locations_to_exclude = []
         # If goal essence requirement is set to a specific value, prevent essence-bound checks which require more
         # essences than this goal to hold anything of value
-        if self.options.required_essences < 7:
+        if self.options.required_essences < 7 and len(self.essences_in_game) >= 7:
             locations_to_exclude.append("Horon Village: Item Inside Maku Tree (7+ Essences)")
-            if self.options.required_essences < 5:
+            if self.options.required_essences < 5 and len(self.essences_in_game) >= 5:
                 locations_to_exclude.append("Horon Village: Item Inside Maku Tree (5+ Essences)")
-                if self.options.required_essences < 3:
+                if self.options.required_essences < 3 and len(self.essences_in_game) >= 3:
                     locations_to_exclude.append("Horon Village: Item Inside Maku Tree (3+ Essences)")
         if self.options.required_essences < self.options.treehouse_old_man_requirement:
             locations_to_exclude.append("Holodrum Plain: Old Man in Treehouse")
@@ -450,7 +459,7 @@ class OracleOfSeasonsWorld(World):
         if not self.is_volcanoes_west_portal_reachable():
             locations_to_exclude.append("Temple Remains: Item in Cave Behind Rockslide")
 
-        # If dungeons wihout essence need to be excluded, do it if conditions are met
+        # If dungeons without essence need to be excluded, do it if conditions are met
         if self.options.exclude_dungeons_without_essence and not self.options.shuffle_essences:
             for i, essence_name in enumerate(ESSENCES):
                 if ESSENCES[i] not in self.essences_in_game:
