@@ -525,16 +525,13 @@ class OracleOfSeasonsWorld(World):
                 # If essence was decided not to be placed because of "Placed Essences" option or
                 # because of pedestal being an excluded location, replace it with a filler item
                 if item_name not in self.essences_in_game:
-                    item_name = self.get_filler_item_name()
+                    filler_item_count += 1
+                    continue
                 # If essences are not shuffled, place and lock this item directly on the pedestal.
                 # Otherwise, the fill algorithm will take care of placing them anywhere in the multiworld.
                 if not self.options.shuffle_essences:
-                    item = self.create_item(item_name)
-                    # Force a filler classification to avoid edge cases where we generate a "filler" currency item that
-                    # ends up being progression, preventing location from being excluded
-                    if item_name not in self.essences_in_game:
-                        item.classification = ItemClassification.filler
-                    self.multiworld.get_location(loc_name, self.player).place_locked_item(item)
+                    essence_item = self.create_item(item_name)
+                    self.multiworld.get_location(loc_name, self.player).place_locked_item(essence_item)
                     continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
@@ -694,7 +691,7 @@ class OracleOfSeasonsWorld(World):
             "Rupees (20)", "Rupees (30)",
             "Ore Chunks (50)", "Ore Chunks (25)", "Ore Chunks (10)", "Ore Chunks (10)",
             "Random Ring", "Random Ring",
-            "Gasha Seed", "Gasha Seed", "Gasha Seed",
+            "Gasha Seed", "Gasha Seed",
             "Potion"
         ]
 
