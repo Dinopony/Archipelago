@@ -322,6 +322,8 @@ class OracleOfSeasonsWorld(World):
 
     def randomize_shop_prices(self):
         if self.options.shop_prices == "vanilla":
+            if self.options.enforce_potion_in_shop:
+                self.shop_prices["horonShop3"] = 300
             return
         if self.options.shop_prices == "free":
             self.shop_prices = {k: 0 for k in self.shop_prices}
@@ -330,16 +332,16 @@ class OracleOfSeasonsWorld(World):
         # Prices are randomized, get a random price that follow set options for each shop location.
         # Values must be rounded to nearest valid rupee amount.
         average = AVERAGE_PRICE_PER_LOCATION[self.options.shop_prices.current_key]
-        for k in self.shop_prices:
-            # Normal distribution
-            #       50 => [25; 75 ~> 70]      μ=50  σ=19
-            #       100 => [50; 150]          μ=100 σ=38
-            #       200 => [100; 300]         μ=200 σ=76
-            #       350 => [175; 525 ~> 500]  μ=350 σ=133
-            value = self.random.gauss(average, 19 * (average / 50))
-            if k.startswith("subrosia"):
-                value *= 0.5  # Subrosia Market items are 2x cheaper since Ore Chunks are rarer
-            self.shop_prices[k] = min(VALID_RUPEE_PRICE_VALUES, key=lambda x: abs(x - value))
+        deviation = min(19 * (average / 50), 100)
+        for i, shop in enumerate(self.shop_order):
+            shop_price_factor = (i / len(self.shop_order)) + 0.5
+            for location_code in shop:
+                value = self.random.gauss(average, deviation) * shop_price_factor
+                self.shop_prices[location_code] = min(VALID_RUPEE_PRICE_VALUES, key=lambda x: abs(x - value))
+        # Subrosia market special cases
+        for i in range(2, 6):
+            value = self.random.gauss(average, deviation) * 0.5
+            self.shop_prices[f"subrosianMarket{i}"] = min(VALID_RUPEE_PRICE_VALUES, key=lambda x: abs(x - value))
 
     def compute_rupee_requirements(self):
         # Compute global rupee requirements for each shop, based on shop order and item prices

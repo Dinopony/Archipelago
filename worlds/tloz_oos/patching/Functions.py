@@ -380,7 +380,7 @@ def apply_miscellaneous_options(rom: RomData, patch_data):
     # If horon shop 3 is set to be a renewable Potion, manually edit the shop flag for
     # that slot to zero to make it stay after buying
     if patch_data["options"]["enforce_potion_in_shop"]:
-        rom.write_byte(0x20cfa, 0x00)
+        rom.write_byte(0x20cfb, 0x00)
 
     if patch_data["options"]["master_keys"] != OracleOfSeasonsMasterKeys.option_disabled:
         # Remove small key consumption on keydoor opened
