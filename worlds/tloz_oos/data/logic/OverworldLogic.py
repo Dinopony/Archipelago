@@ -341,16 +341,13 @@ def make_holodrum_logic(player: int):
             oos_can_break_mushroom(state, player, True)
         ])],
 
-        ["d5 entrance", "d5 stump", False, lambda state: any([
-            # Leaving D5 entrance is a risky action since you need quite a few things to be able to get
-            # back to that entrance. Ensure player can warp if that's not the case.
-            all([
-                oos_can_jump_1_wide_pit(state, player, False),
-                oos_has_autumn(state, player),
-                oos_can_break_mushroom(state, player, True)
-            ]),
-            oos_can_warp(state, player)
-        ])],
+        # There are some logical paths which directly go from "eyeglass lake portal" or "d1 stump" to "d5 entrance"
+        # without passing through "d5 stump".
+        # Those paths exist because they take advantage of default seasons,  and are only made that way for
+        # logic-writing convenience.
+        # In reality, if you were able to reach D5 entrance, you MUST have went by D5 stump at some point.
+        # From this, we assume that having access to D5 entrance always means you also have access to D5 stump.
+        ["d5 entrance", "d5 stump", False, lambda state: None],
 
         ["d5 stump", "dry eyeglass lake, east cave", False, lambda state: all([
             oos_has_summer(state, player),
@@ -358,6 +355,7 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["d5 entrance", "dry eyeglass lake, east cave", False, lambda state: all([
+            oos_can_jump_1_wide_pit(state, player, True),
             oos_get_default_season(state, player, "EYEGLASS_LAKE") == SEASON_SUMMER,
             oos_has_bracelet(state, player),
         ])],
