@@ -228,6 +228,15 @@ class OracleOfSeasonsExcludeDungeonsWithoutEssence(DefaultOnToggle):
     display_name = "Exclude Dungeons Without Essence"
 
 
+class OracleOfSeasonsShowDungeonsWithEssence(DefaultOnToggle):
+    """
+    If enabled, dungeons containing an essence will be sparkling on the in-game map.
+    This is especially useful when using "Exclude Dungeons Without Essence" to know which dungeons you can ignore.
+    If "Shuffle Essences" is enabled, this option has no effect.
+    """
+    display_name = "Show Dungeons With Essence"
+
+
 class OracleOfSeasonsMasterKeys(Choice):
     """
     - Disabled: All dungeon keys must be obtained individually, just like in vanilla
@@ -517,6 +526,7 @@ class OracleOfSeasonsOptions(PerGameCommonOptions):
     placed_essences: OracleOfSeasonsPlacedEssences
     shuffle_essences: OracleOfSeasonsEssenceSanity
     exclude_dungeons_without_essence: OracleOfSeasonsExcludeDungeonsWithoutEssence
+    show_dungeons_with_essence: OracleOfSeasonsShowDungeonsWithEssence
 
     # Seasons
     default_seasons: OracleOfSeasonsDefaultSeasons

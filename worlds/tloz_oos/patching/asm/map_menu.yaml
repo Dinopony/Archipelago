@@ -277,3 +277,43 @@
     ld c,a
 
     jp getPortalText
+
+
+# ========== ESSENCE SPARKLE HINTS ==================
+# Replace the whole Treasure Map code with sparkles for essences
+02/262a/: |
+    ld hl,@essenceLocations
+    ld c,$01
+    
+    ; Essence has not yet been obtained, check if map currently being displayed is the right one
+    @essenceLoop:
+    ldi a,(hl)
+    cp $ff
+    ret z
+    ld b,a
+    ld a,(wMapMenuMode)
+    cp b
+    jr nz,@nextLoop
+    
+    ; Check if essence has already been obtained
+    ld a,(wEssencesObtained)
+    and c
+    jr nz,@nextLoop
+    
+    ; We're on the right map, display the essence with a sparkle
+    ld a,(hl)
+    push hl
+    push bc
+    ld hl,$cec0
+    call $65a1  ; mapMenu_drawSpriteAtRoomIndex
+    pop bc
+    pop hl
+    
+    @nextLoop:
+    inc hl
+    sla c
+    jr @essenceLoop
+    
+    @essenceLocations:
+    /include essenceLocationsTable
+    db $ff

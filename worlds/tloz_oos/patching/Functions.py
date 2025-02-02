@@ -729,3 +729,20 @@ def define_dungeon_items_text_constants(assembler: Z80Assembler, patch_data):
             compasses_text.extend(dungeon_precision)
         compasses_text.extend([0x05, 0xd8, 0x00])  # "\color(WHITE)!(end)"
         assembler.add_floating_chunk(f"text.compassD{i}", compasses_text)
+
+
+def define_essence_sparkle_constants(assembler: Z80Assembler, patch_data):
+    byte_array = []
+
+    essence_pedestals = [k for k, v in LOCATIONS_DATA.items() if v.get("essence", False)]
+    if patch_data["options"]["show_dungeons_with_essence"] and not patch_data["options"]["shuffle_essences"]:
+        for i, pedestal in enumerate(essence_pedestals):
+            if patch_data["locations"][pedestal]["item"] not in ESSENCES:
+                continue
+
+            # Find where dungeon entrance is located, and place the sparkle hint there
+            dungeon = f"d{i+1}"
+            dungeon_entrance = [k for k, v in patch_data["dungeon_entrances"].items() if v == dungeon][0]
+            entrance_data = DUNGEON_ENTRANCES[dungeon_entrance]
+            byte_array.extend([entrance_data["group"], entrance_data["room"]])
+    assembler.add_floating_chunk("essenceLocationsTable", byte_array)
