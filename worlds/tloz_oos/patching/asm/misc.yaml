@@ -1,14 +1,11 @@
-# allow skipping the capcom screen after one second by pressing start.
-03//skipCapcom: |
-    push hl
-    ld a,($cbb3)
-    cp $94
-    jr nc,@noSkip
-    call forceEnableIntroInputs
-    @noSkip:
-    pop hl
-    jp decHlRef16WithCap
-03/0d6b/: call skipCapcom
+# allow skipping the capcom screen after one second by pressing start
+03//checkSkipCapcom: |
+    ld hl,$cbb3
+    ld a,$94
+    cp (hl)
+    ret c
+    jp forceEnableIntroInputs
+03/0d68/: call checkSkipCapcom
 
 # make link actionable as soon as he drops into the world.
 05/0d98/: jp setLinkIdOverride
