@@ -371,7 +371,7 @@ class OracleOfSeasonsWorld(World):
         self.random_rings_pool = ring_names
 
     def location_is_active(self, location_name, location_data):
-        if "conditional" not in location_data or location_data["conditional"] is False:
+        if not location_data.get("conditional", False):
             return True
 
         region_id = location_data["region_id"]

@@ -228,13 +228,24 @@ class OracleOfSeasonsExcludeDungeonsWithoutEssence(DefaultOnToggle):
     display_name = "Exclude Dungeons Without Essence"
 
 
-class OracleOfSeasonsShowDungeonsWithEssence(DefaultOnToggle):
+class OracleOfSeasonsShowDungeonsWithEssence(Choice):
     """
-    If enabled, dungeons containing an essence will be sparkling on the in-game map.
+    Determines the condition required to highlight dungeons having an essence on their end pedestal
+    (with a sparkle on the in-game map).
     This is especially useful when using "Exclude Dungeons Without Essence" to know which dungeons you can ignore.
     If "Shuffle Essences" is enabled, this option has no effect.
+    - Disabled: Dungeons with an essence are never shown on the map
+    - With Treasure Map: Dungeons with an essence all become highlighted when you obtain the unique Treasure Map item
+    - With Compass: Dungeons with an essence can only be highlighted after obtaining their Compass
+    - Always: Dungeons with an essence are always shown on the map
     """
     display_name = "Show Dungeons With Essence"
+
+    option_disabled = 0
+    option_with_compass = 1
+    option_always = 2
+
+    default = 1
 
 
 class OracleOfSeasonsMasterKeys(Choice):

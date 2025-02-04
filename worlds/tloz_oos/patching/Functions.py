@@ -9,7 +9,7 @@ from .z80asm.Assembler import Z80Assembler
 from .Constants import *
 from ..data.Constants import *
 from .. import LOCATIONS_DATA, OracleOfSeasonsOldMenShuffle, OracleOfSeasonsGoal, OracleOfSeasonsAnimalCompanion, \
-    OracleOfSeasonsMasterKeys, OracleOfSeasonsFoolsOre
+    OracleOfSeasonsMasterKeys, OracleOfSeasonsFoolsOre, OracleOfSeasonsShowDungeonsWithEssence
 from pathlib import Path
 
 
@@ -733,9 +733,10 @@ def define_dungeon_items_text_constants(assembler: Z80Assembler, patch_data):
 
 def define_essence_sparkle_constants(assembler: Z80Assembler, patch_data):
     byte_array = []
+    show_dungeons_with_essence = patch_data["options"]["show_dungeons_with_essence"]
 
     essence_pedestals = [k for k, v in LOCATIONS_DATA.items() if v.get("essence", False)]
-    if patch_data["options"]["show_dungeons_with_essence"] and not patch_data["options"]["shuffle_essences"]:
+    if show_dungeons_with_essence and not patch_data["options"]["shuffle_essences"]:
         for i, pedestal in enumerate(essence_pedestals):
             if patch_data["locations"][pedestal]["item"] not in ESSENCES:
                 continue
@@ -746,3 +747,6 @@ def define_essence_sparkle_constants(assembler: Z80Assembler, patch_data):
             entrance_data = DUNGEON_ENTRANCES[dungeon_entrance]
             byte_array.extend([entrance_data["group"], entrance_data["room"]])
     assembler.add_floating_chunk("essenceLocationsTable", byte_array)
+
+    require_compass = show_dungeons_with_essence == OracleOfSeasonsShowDungeonsWithEssence.option_with_compass
+    assembler.define_byte("option.essenceSparklesRequireCompass", 1 if require_compass else 0)

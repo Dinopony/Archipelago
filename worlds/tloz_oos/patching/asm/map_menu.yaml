@@ -280,6 +280,29 @@
 
 
 # ========== ESSENCE SPARKLE HINTS ==================
+
+# in[c]: bit mask for that dungeon's essence in wObtainedEssences
+# out[Z]: flag is cleared if compass is owned for that dungeon, or if condition is disabled altogether
+# Note that this function alters [a]
+02//checkCompassForSparkles: |
+    ; If compasses are not required to see sparkles, always return with Z flag cleared
+    ld a,option.essenceSparklesRequireCompass
+    xor $01
+    or a
+    ret nz
+    
+    ; Otherwise, check if compass is really owned
+    push hl
+    ld hl,wDungeonCompasses
+    ld a,c
+    rlc a
+    jr nc,@lookForMapFlag
+    inc hl
+    @lookForMapFlag:
+    and (hl)
+    pop hl
+    ret
+
 # Replace the whole Treasure Map code with sparkles for essences
 02/262a/: |
     ld hl,@essenceLocations
@@ -299,6 +322,10 @@
     ld a,(wEssencesObtained)
     and c
     jr nz,@nextLoop
+    
+    ; Check if compasses are required and, if that's the case, if we own the proper compass
+    call checkCompassForSparkles
+    jr z,@nextLoop
     
     ; We're on the right map, display the essence with a sparkle
     ld a,(hl)
