@@ -92,7 +92,7 @@ LOCATIONS_DATA = {
         "collect": COLLECT_CHEST,
         "map_tile": 0xc2,
     },
-    "Natzu: Chest after Moblin Keep": {
+    "Natzu Region: Chest after Moblin Keep": {
         "region_id": "moblin keep chest",
         "vanilla_item": "Piece of Heart",
         "flag_byte": 0xc75b,
