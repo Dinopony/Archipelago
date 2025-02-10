@@ -133,7 +133,13 @@ def make_d2_logic(player: int):
         ["d2 alt entrances", "d2 scrub", False, lambda state: oos_has_rupees_for_shop(state, player, "d2Scrub")],
 
         # 2 keys
-        ["d2 roller chest", "d2 spinner", False, lambda state: oos_has_small_keys(state, player, 2, 2)],
+        ["d2 roller chest", "d2 spinner", False, lambda state: all([
+            oos_has_small_keys(state, player, 2, 2),
+            oos_has_bombs(state, player)
+        ])],
+        # You can take the Facade miniboss teleporter to reach dungeon entrance, even if you entered the dungeon
+        # through the alt-entrance
+        ["d2 spinner", "d2 torch room", False, None],
         ["d2 spinner", "dodongo owl", False, lambda state: oos_can_use_mystery_seeds(state, player)],
         ["d2 spinner", "d2 boss", False, lambda state: all([
             oos_has_boss_key(state, player, 2),
