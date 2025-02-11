@@ -292,6 +292,7 @@ LOCATION_GROUPS = {
         "Snake's Remains: Chest in Moving Blades Room",
         "Snake's Remains: Chest in Bomb Spiral Maze Room",
         "Snake's Remains: Chest on Terrace",
+        "Snake's Remains: Business Scrub",
         "Snake's Remains: Boss Reward",
         "Snake's Remains: Essence",
     ],
@@ -320,6 +321,7 @@ LOCATION_GROUPS = {
         'Dancing Dragon Dungeon (1F): Crumbling Room Chest',
         'Dancing Dragon Dungeon (1F): Eye Diving Spot Item',
         'Dancing Dragon Dungeon (B1F): Boss Reward',
+        'Dancing Dragon Dungeon (1F): Business Scrub',
         'Dancing Dragon Dungeon: Essence',
     ],
     'D5': [
