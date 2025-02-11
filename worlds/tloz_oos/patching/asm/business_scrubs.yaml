@@ -144,6 +144,10 @@
     inc hl
     ld c,(hl)
     call spawnTreasureOnLink
+    jr nz,@scrubBuyEnd
+    ; Set forced collect mode in var31 to avoid setting the item flag
+    ld l,$71  
+    ld (hl),COLLECT_PICKUP_NOFLAG
     ld a,(de)
     call setScrubItemFlag
     jr @scrubBuyEnd
