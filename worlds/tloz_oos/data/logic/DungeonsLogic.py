@@ -92,7 +92,7 @@ def make_d1_logic(player: int):
 def make_d2_logic(player: int):
     return [
         # 0 keys
-        ["enter d2", "d2 torch room", False, None],
+        ["enter d2", "d2 torch room", True, None],
         ["d2 torch room", "d2 left from entrance", False, None],
         ["d2 torch room", "d2 rope drop", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["d2 torch room", "d2 arrow room", False, lambda state: oos_can_use_ember_seeds(state, player, True)],
