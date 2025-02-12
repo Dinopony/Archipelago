@@ -823,6 +823,7 @@ def oos_can_trigger_lever(state: CollectionState, player: int):
 
 def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
     return any([
+        oos_can_punch(state, player),
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
         oos_has_boomerang(state, player),
