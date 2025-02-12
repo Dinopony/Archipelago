@@ -50,6 +50,10 @@ class OracleOfSeasonsSettings(settings.Group):
         """
         If true, no music will be played in the game while sound effects remain untouched
         """
+    class OoSRosaQuickUnlock(str):
+        """
+        If true, rosa will instantly unlock all subrosia locks
+        """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = True
@@ -58,6 +62,7 @@ class OracleOfSeasonsSettings(settings.Group):
     reveal_hidden_subrosia_digging_spots: Union[OoSRevealDiggingSpots, bool] = True
     heart_beep_interval: Union[OoSHeartBeepInterval, str] = "vanilla"
     remove_music: Union[OoSRemoveMusic, bool] = False
+    rosa_quick_unlock: Union[OoSRosaQuickUnlock, bool] = False
 
 
 class OracleOfSeasonsWeb(WebWorld):
