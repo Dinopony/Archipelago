@@ -1,5 +1,6 @@
 REGIONS = [
     "Menu",
+    "impa's house",
     "horon village",
     "horon village portal",
     "horon village tree",
@@ -29,6 +30,7 @@ REGIONS = [
     "maku tree, 7 essences",
     "horon shop",
     "member's shop",
+    "western coast",
     "black beast's chest",
     "d0 entrance",
     "western coast after ship",
