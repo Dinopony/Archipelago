@@ -442,7 +442,7 @@ def make_holodrum_logic(player: int):
                     # can get from the stump to old man in summer
                     oos_has_summer(state, player),
                     any([
-                        oos_has_feather(state, player),
+                        oos_can_jump_1_wide_pit(state, player, True),
                         all([
                             oos_can_break_bush(state, player, True),
                             oos_can_swim(state, player, True)
