@@ -967,9 +967,17 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["lost woods stump", "lost woods", False, lambda state: oos_can_reach_lost_woods_pedestal(state, player)],
+        # special case for getting to d6 using default season
+        ["lost woods", "d6 sector", False, lambda state: all([
+            oos_can_complete_lost_woods_main_sequence(state, player, True),
+            oos_option_medium_logic(state, player)
+        ])],
         ["lost woods stump", "d6 sector", False, lambda state: oos_can_complete_lost_woods_main_sequence(state, player)],
         # special case for getting to pedestal using default season
-        ["d6 sector", "lost woods", False, lambda state: oos_can_reach_lost_woods_pedestal(state, player, True)],
+        ["d6 sector", "lost woods", False, lambda state: all([
+            oos_can_reach_lost_woods_pedestal(state, player, True),
+            oos_option_medium_logic(state, player)
+        ])],
 
         ["d6 sector", "maple trade", False, lambda state: all([
             oos_can_meet_maple(state, player),

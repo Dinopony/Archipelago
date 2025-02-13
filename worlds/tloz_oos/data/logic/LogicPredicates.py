@@ -218,12 +218,12 @@ def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int, allow
     ])
 
 
-def oos_can_complete_lost_woods_main_sequence(state: CollectionState, player: int):
+def oos_can_complete_lost_woods_main_sequence(state: CollectionState, player: int, allow_default: bool = False):
     world = state.multiworld.worlds[player]
     seasons_in_main_sequence = [season for [_, season] in world.lost_woods_main_sequence]
 
     return all([
-        oos_can_complete_season_sequence(state, player, seasons_in_main_sequence),
+        oos_can_complete_season_sequence(state, player, seasons_in_main_sequence, allow_default),
         any([
             all([
                 oos_can_break_mushroom(state, player, False),
