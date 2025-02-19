@@ -679,7 +679,6 @@ class OracleOfSeasonsWorld(World):
         # This usually ends up with generator not having anywhere to place a few small keys, making the seed unbeatable.
         # To circumvent this, we perform a restricted pre-fill here, placing only those dungeon items
         # before anything else.
-        collection_state = self.multiworld.get_all_state(False)
         # Build a list of all dungeon items that will need to be placed in their own dungeon.
         all_confined_dungeon_items = self.filter_confined_dungeon_items_from_pool()
         for i in range(0, 9):
@@ -697,8 +696,9 @@ class OracleOfSeasonsWorld(World):
                 continue  # This list might be empty with some keysanity options
             for item in confined_dungeon_items:
                 self.multiworld.itempool.remove(item)
-                collection_state.remove(item)
 
+            # Get a new state each time to avoid poluting other prefills
+            collection_state = self.multiworld.get_all_state(False)
             # Perform a prefill to place confined items inside locations of this dungeon
             self.random.shuffle(dungeon_locations)
             fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
