@@ -1033,53 +1033,62 @@ def make_holodrum_logic(player: int):
             ])
         ])],
         
-        ["temple remains lower stump", "temple remains upper stump", False, lambda state: all([
-            # connection is useless once volcano is triggered
-            # just block it so it's less confusing for logic
-            not state.has("_triggered_volcano", player),
-            any([
-                all([  # Winter rule
-                    oos_season_in_temple_remains(state, player, SEASON_WINTER),
-                    oos_can_remove_snow(state, player, False),
-                    oos_can_break_bush(state, player, False),
-                    oos_can_jump_6_wide_pit(state, player)
-                ]),
-                all([  # Summer rule
-                    oos_season_in_temple_remains(state, player, SEASON_SUMMER),
-                    oos_can_break_bush(state, player, False),
-                    oos_can_jump_6_wide_pit(state, player)
-                ]),
-                all([  # Spring rule
-                    oos_season_in_temple_remains(state, player, SEASON_SPRING),
-                    oos_can_break_flowers(state, player),
-                    oos_can_break_bush(state, player, False),
-                    oos_can_jump_6_wide_pit(state, player)
-                ]),
-                all([  # Autumn rule
-                    oos_season_in_temple_remains(state, player, SEASON_AUTUMN),
-                    oos_can_break_bush(state, player)
-                ])
+        ["temple remains lower stump", "temple remains upper stump", False, lambda state: any([
+            all([  # Volcano rule
+                state.has("_triggered_volcano", player),
+                oos_has_feather(state, player)
+            ]),
+            all([  # Winter rule
+                not state.has("_triggered_volcano", player),
+                oos_season_in_temple_remains(state, player, SEASON_WINTER),
+                oos_can_remove_snow(state, player, False),
+                oos_can_break_bush(state, player, False),
+                oos_can_jump_6_wide_pit(state, player)
+            ]),
+            all([  # Summer rule
+                not state.has("_triggered_volcano", player),
+                oos_season_in_temple_remains(state, player, SEASON_SUMMER),
+                oos_can_break_bush(state, player, False),
+                oos_can_jump_6_wide_pit(state, player)
+            ]),
+            all([  # Spring rule
+                not state.has("_triggered_volcano", player),
+                oos_season_in_temple_remains(state, player, SEASON_SPRING),
+                oos_can_break_flowers(state, player),
+                oos_can_break_bush(state, player, False),
+                oos_can_jump_6_wide_pit(state, player)
+            ]),
+            all([  # Autumn rule
+                not state.has("_triggered_volcano", player),
+                oos_season_in_temple_remains(state, player, SEASON_AUTUMN),
+                oos_can_break_bush(state, player)
             ])
         ])],
         ["temple remains upper stump", "temple remains lower stump", False, lambda state: all([
-            # connection is useless once volcano is triggered
-            # just block it so it's less confusing for logic
-            not state.has("_triggered_volcano", player),
             any([
-                # Winter rule
-                oos_season_in_temple_remains(state, player, SEASON_WINTER),
+                all([  # Volcano rule
+                    state.has("_triggered_volcano", player),
+                    oos_has_feather(state, player)
+                ]),
+                all([  # Winter rule
+                    not state.has("_triggered_volcano", player),
+                    oos_season_in_temple_remains(state, player, SEASON_WINTER),
+                ]),
                 all([  # Summer rule
+                    not state.has("_triggered_volcano", player),
                     oos_season_in_temple_remains(state, player, SEASON_SUMMER),
                     oos_can_break_bush(state, player, False),
                     oos_can_jump_6_wide_pit(state, player)
                 ]),
                 all([  # Spring rule
+                    not state.has("_triggered_volcano", player),
                     oos_season_in_temple_remains(state, player, SEASON_SPRING),
                     oos_can_break_flowers(state, player),
                     oos_can_break_bush(state, player, False),
                     oos_can_jump_6_wide_pit(state, player)
                 ]),
                 all([  # Autumn rule
+                    not state.has("_triggered_volcano", player),
                     oos_season_in_temple_remains(state, player, SEASON_AUTUMN),
                     oos_can_break_bush(state, player)
                 ])
@@ -1091,12 +1100,16 @@ def make_holodrum_logic(player: int):
             oos_has_feather(state, player)
         ])],
 
-        ["temple remains upper stump", "temple remains lower portal access", False, lambda state: all([
-            # connection is useless once volcano is triggered
-            # just block it so it's less confusing for logic
-            not state.has("_triggered_volcano", player),
-            oos_has_winter(state, player),
-            oos_has_feather(state, player)
+        ["temple remains upper stump", "temple remains lower portal access", False, lambda state: any([
+            all([
+                not state.has("_triggered_volcano", player),
+                oos_has_winter(state, player),
+                oos_has_feather(state, player)
+            ]),
+            all([
+                state.has("_triggered_volcano", player),
+                oos_has_feather(state, player)
+            ])
         ])],
 
         ["temple remains lower portal access", "temple remains lower portal", True, None],
@@ -1124,12 +1137,8 @@ def make_holodrum_logic(player: int):
             oos_can_jump_1_wide_liquid(state, player, False)
         ])],
 
-        ["temple remains upper portal", "temple remains upper stump", False, lambda state: all([
-            # connection is useless once volcano is triggered
-            # just block it so it's less confusing for logic
-            not state.has("_triggered_volcano", player),
-            oos_can_jump_1_wide_pit(state, player, False)
-        ])],
+        ["temple remains upper portal", "temple remains upper stump", False, lambda state:
+            oos_can_jump_1_wide_pit(state, player, False)],
 
         ["temple remains upper portal", "temple remains lower portal access", False, lambda state: any([
             oos_can_jump_1_wide_pit(state, player, False),
