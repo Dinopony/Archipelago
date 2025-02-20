@@ -807,6 +807,7 @@ class OracleOfSeasonsWorld(World):
         slot_data["portal_connections"] = self.portal_connections
         slot_data["shop_order"] = self.shop_order
         slot_data["shop_rupee_requirements"] = self.shop_rupee_requirements
+        slot_data["shop_costs"] = self.shop_prices
 
         return slot_data
 
