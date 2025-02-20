@@ -791,7 +791,7 @@ class OracleOfSeasonsWorld(World):
                    "sign_guy_requirement", "golden_beasts_requirement",
                    # Tracker QoL
                    "enforce_potion_in_shop", "keysanity_small_keys", "keysanity_boss_keys", "starting_maps_compasses",
-                   "deterministic_gasha_locations"
+                   "deterministic_gasha_locations", "shuffle_business_scrubs", "shop_prices"
                    ]
 
         slot_data = self.options.as_dict(*options)
@@ -805,7 +805,6 @@ class OracleOfSeasonsWorld(World):
 
         slot_data["dungeon_entrances"] = self.dungeon_entrances
         slot_data["portal_connections"] = self.portal_connections
-        slot_data["shop_prices"] = self.shop_prices
         slot_data["shop_order"] = self.shop_order
         slot_data["shop_rupee_requirements"] = self.shop_rupee_requirements
 
