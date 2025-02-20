@@ -830,8 +830,7 @@ def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
         oos_has_rod(state, player),
 
         oos_can_use_scent_seeds(state, player),
-        oos_can_use_mystery_seeds(state, player),
-        oos_can_use_ember_seeds(state, player),
+        oos_can_use_ember_seeds(state, player, True),
         oos_has_slingshot(state, player),  # any seed works using slingshot
     ])
 

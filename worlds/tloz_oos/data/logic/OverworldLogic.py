@@ -5,7 +5,7 @@ def make_holodrum_logic(player: int):
     return [
         ["Menu", "impa's house", False, None],
 
-        ["impa's house", "horon village", True, None]
+        ["impa's house", "horon village", True, None],
         ["horon village", "mayor's gift", False, None],
         ["horon village", "vasu's gift", False, None],
         ["horon village", "mayor's house secret room", False, lambda state: oos_has_bombs(state, player)],
@@ -610,7 +610,7 @@ def make_holodrum_logic(player: int):
                 oos_can_summon_moosh(state, player),
                 oos_can_jump_2_wide_pit(state, player)
             ])
-        ])]
+        ])],
         ["spool swamp south", "spool swamp south (summer)", False, lambda state: \
             oos_get_default_season(state, player, "SPOOL_SWAMP") == SEASON_SUMMER],
         ["spool stump", "spool swamp south (summer)", False, lambda state: all([
@@ -621,7 +621,7 @@ def make_holodrum_logic(player: int):
                 oos_can_summon_moosh(state, player),
                 oos_can_jump_2_wide_pit(state, player)
             ])
-        ])]
+        ])],
         ["spool swamp south", "spool swamp south (autumn)", False, lambda state: \
             oos_get_default_season(state, player, "SPOOL_SWAMP") == SEASON_AUTUMN],
         ["spool stump", "spool swamp south (autumn)", False, lambda state: all([
@@ -632,7 +632,7 @@ def make_holodrum_logic(player: int):
                 oos_can_summon_moosh(state, player),
                 oos_can_jump_2_wide_pit(state, player)
             ])
-        ])]
+        ])],
         ["spool swamp south", "spool swamp south (winter)", False, lambda state: \
             oos_get_default_season(state, player, "SPOOL_SWAMP") == SEASON_WINTER],
         ["spool stump", "spool swamp south (winter)", False, lambda state: all([
@@ -643,7 +643,7 @@ def make_holodrum_logic(player: int):
                 oos_can_summon_moosh(state, player),
                 oos_can_jump_2_wide_pit(state, player)
             ])
-        ])]
+        ])],
         ["spool swamp south (winter)", "spool swamp south", False, None],
         ["spool swamp south (spring)", "spool swamp south", False, None],
         ["spool swamp south (summer)", "spool swamp south", False, None],
@@ -948,7 +948,7 @@ def make_holodrum_logic(player: int):
                     oos_option_medium_logic(state, player),
                     oos_has_magic_boomerang(state, player),
                     any([
-                        oos_can_jump_1_wide_pit(state, player),
+                        oos_can_jump_1_wide_pit(state, player, False),
                         oos_option_hard_logic(state, player)
                     ])
                 ])
@@ -1089,13 +1089,13 @@ def make_holodrum_logic(player: int):
         ["temple remains lower stump", "temple remains lower portal access", False, lambda state: all([
             state.has("_triggered_volcano", player),
             oos_has_feather(state, player)
-        ])]
+        ])],
 
         ["temple remains upper stump", "temple remains lower portal access", False, lambda state: all([
             # connection is useless once volcano is triggered
             # just block it so it's less confusing for logic
             not state.has("_triggered_volcano", player),
-            oos_has_winter(state, player, SEASON_WINTER),
+            oos_has_winter(state, player),
             oos_has_feather(state, player)
         ])],
 
@@ -1132,7 +1132,7 @@ def make_holodrum_logic(player: int):
         ])],
 
         ["temple remains upper portal", "temple remains lower portal access", False, lambda state: any([
-            oos_can_jump_1_wide_pit(state, player),
+            oos_can_jump_1_wide_pit(state, player, False),
             all([
                 not state.has("_triggered_volcano", player),
                 oos_get_default_season(state, player, "TEMPLE_REMAINS") == SEASON_WINTER
@@ -1189,7 +1189,7 @@ def make_holodrum_logic(player: int):
                     oos_season_in_lost_woods(state, player, SEASON_AUTUMN),
                     oos_has_magic_boomerang(state, player),
                     any([
-                        oos_can_jump_1_wide_pit(state, player),
+                        oos_can_jump_1_wide_pit(state, player, False),
                         oos_option_hard_logic(state, player)
                     ])
                 ])
