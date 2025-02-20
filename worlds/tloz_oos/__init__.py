@@ -102,6 +102,7 @@ class OracleOfSeasonsWorld(World):
     item_name_to_id = build_item_name_to_id_dict()
     item_name_groups = ITEM_GROUPS
     location_name_groups = LOCATION_GROUPS
+    origin_region_name = "impa's house"
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)

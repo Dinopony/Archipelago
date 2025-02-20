@@ -3,8 +3,6 @@ from .LogicPredicates import *
 
 def make_holodrum_logic(player: int):
     return [
-        ["Menu", "impa's house", False, None],
-
         ["impa's house", "horon village", True, None],
         ["horon village", "mayor's gift", False, None],
         ["horon village", "vasu's gift", False, None],

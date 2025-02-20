@@ -1,5 +1,4 @@
 REGIONS = [
-    "Menu",
     "impa's house",
     "horon village",
     "horon village portal",
