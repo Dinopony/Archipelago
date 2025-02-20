@@ -1,7 +1,7 @@
 from .LogicPredicates import *
 
 
-def make_holodrum_logic(player: int):
+def make_holodrum_logic(player: int, origin_name: str):
     return [
         ["impa's house", "horon village", True, None],
         ["horon village", "mayor's gift", False, None],
@@ -1263,7 +1263,7 @@ def make_holodrum_logic(player: int):
         ["western coast after ship", "western coast gasha spot", False, None],
         ["north horon", "onox gasha spot", False, lambda state: oos_has_shovel(state, player)],
 
-        ["Menu", "gasha tree 1",  False, lambda state: oos_can_harvest_gasha(state, player, 1)],
+        [origin_name, "gasha tree 1",  False, lambda state: oos_can_harvest_gasha(state, player, 1)],
         ["gasha tree 1", "gasha tree 2",  False, lambda state: oos_can_harvest_gasha(state, player, 2)],
         ["gasha tree 2", "gasha tree 3",  False, lambda state: oos_can_harvest_gasha(state, player, 3)],
         ["gasha tree 3", "gasha tree 4",  False, lambda state: oos_can_harvest_gasha(state, player, 4)],

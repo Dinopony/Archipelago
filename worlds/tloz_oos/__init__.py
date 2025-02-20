@@ -507,7 +507,7 @@ class OracleOfSeasonsWorld(World):
             self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
 
     def set_rules(self):
-        create_connections(self.multiworld, self.player)
+        create_connections(self.multiworld, self.player, self.origin_region_name)
         apply_self_locking_rules(self.multiworld, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
@@ -805,6 +805,9 @@ class OracleOfSeasonsWorld(World):
 
         slot_data["dungeon_entrances"] = self.dungeon_entrances
         slot_data["portal_connections"] = self.portal_connections
+        slot_data["shop_prices"] = self.shop_prices
+        slot_data["shop_order"] = self.shop_order
+        slot_data["shop_rupee_requirements"] = self.shop_rupee_requirements
 
         return slot_data
 
