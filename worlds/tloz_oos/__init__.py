@@ -530,6 +530,11 @@ class OracleOfSeasonsWorld(World):
             self.remaining_progressive_gasha_seeds -= 1
             classification = ItemClassification.progression
 
+        # Players in Medium+ are expected to know the default paths through Lost Woods, Phonograph becomes filler
+        difficulties = ["medium", "hard"]
+        if self.options.logic_difficulty in difficulties and not self.options.randomize_lost_woods_item_sequence and name == "Phonograph":
+            classification = ItemClassification.filler
+
         return Item(name, classification, ap_code, self.player)
 
     def build_item_pool_dict(self):

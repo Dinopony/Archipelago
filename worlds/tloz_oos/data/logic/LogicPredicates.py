@@ -212,7 +212,7 @@ def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int, allow
             all([
                 # if sequence is vanilla, medium+ players are expected to know it
                 oos_option_medium_logic(state, player),
-                not state.multiworld.worlds[player].options.randomize_lost_woods_item_sequence # .value ?
+                not state.multiworld.worlds[player].options.randomize_lost_woods_item_sequence
             ])
         ])
     ])
@@ -232,7 +232,7 @@ def oos_can_complete_lost_woods_main_sequence(state: CollectionState, player: in
             all([
                 # if sequence is vanilla, medium+ players are expected to know it
                 oos_option_medium_logic(state, player),
-                not state.multiworld.worlds[player].options.randomize_lost_woods_main_sequence # .value ?
+                not state.multiworld.worlds[player].options.randomize_lost_woods_main_sequence
             ])
         ])
     ])
@@ -830,7 +830,8 @@ def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
         oos_has_rod(state, player),
 
         oos_can_use_scent_seeds(state, player),
-        oos_can_use_ember_seeds(state, player, True),
+        oos_can_use_mystery_seeds(state, player),
+        oos_can_use_ember_seeds(state, player, False),
         oos_has_slingshot(state, player),  # any seed works using slingshot
     ])
 
