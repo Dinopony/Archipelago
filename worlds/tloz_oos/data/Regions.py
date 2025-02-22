@@ -1,5 +1,5 @@
 REGIONS = [
-    "Menu",
+    "impa's house",
     "horon village",
     "horon village portal",
     "horon village tree",
@@ -14,6 +14,7 @@ REGIONS = [
     "syrup trade",
     "syrup shop",
     "mrs. ruul trade",
+    "maple encounter",
     "maple trade",
     "subrosian chef trade",
     "biggoron trade",
@@ -29,6 +30,7 @@ REGIONS = [
     "maku tree, 7 essences",
     "horon shop",
     "member's shop",
+    "western coast",
     "black beast's chest",
     "d0 entrance",
     "western coast after ship",

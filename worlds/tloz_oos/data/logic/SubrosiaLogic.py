@@ -13,6 +13,7 @@ def make_subrosia_logic(player: int):
         ["volcanoes west portal", "subrosia volcano sector", True, None],
         ["d8 entrance portal", "d8 entrance", True, None],
 
+        # TODO when alt starting locations are implemented, there probably needs to be a way to re-use this forced transition
         ["subrosia pirates sector", "western coast after ship", False, lambda state: state.has("Pirate's Bell", player)],
 
         # Regions ###############################################################

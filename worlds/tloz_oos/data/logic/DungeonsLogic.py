@@ -5,20 +5,10 @@ def make_d0_logic(player: int):
     return [
         # 0 keys
         ["enter d0", "d0 key chest", False, None],
-        ["enter d0", "d0 rupee chest", False, lambda state: any([
-            all([
-                oos_can_break_bush(state, player, True),
-                # If dungeons are shuffled, jumping down the hole is a dangerous action and requires
-                # a way of warping back to be in logic
-                any([
-                    not oos_option_shuffled_dungeons(state, player),
-                    oos_can_warp(state, player)
-                ])
-            ]),
-
+        ["enter d0", "d0 rupee chest", False, lambda state: 
             # If hole is removed, stairs are added inside dungeon to make the chest reachable
             oos_option_no_d0_alt_entrance(state, player),
-        ])],
+        ],
         ["d0 rupee chest", "enter d0", False, None],
         ["enter d0", "d0 hidden 2d section", False, lambda state: any([
             oos_can_kill_normal_enemy(state, player),
@@ -102,20 +92,13 @@ def make_d1_logic(player: int):
 def make_d2_logic(player: int):
     return [
         # 0 keys
-        ["enter d2", "d2 torch room", False, None],
+        ["enter d2", "d2 torch room", True, None],
         ["d2 torch room", "d2 left from entrance", False, None],
         ["d2 torch room", "d2 rope drop", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["d2 torch room", "d2 arrow room", False, lambda state: oos_can_use_ember_seeds(state, player, True)],
 
-        ["d2 arrow room", "d2 torch room", False, lambda state: all([
-            oos_can_kill_normal_enemy(state, player),
-            any([
-                # Backwards path is one-way if we don't have ember seeds, so ensure we have a way to warp out in case
-                # something goes wrong
-                oos_can_use_ember_seeds(state, player, True),
-                oos_can_warp(state, player)
-            ])
-        ])],
+        ["d2 arrow room", "d2 torch room", False, lambda state:
+            oos_can_kill_normal_enemy(state, player)],
         ["d2 arrow room", "d2 rupee room", False, lambda state: oos_has_bombs(state, player)],
         ["d2 arrow room", "d2 rope chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],
         ["d2 arrow room", "d2 blade chest", False, lambda state: oos_can_kill_normal_enemy(state, player)],

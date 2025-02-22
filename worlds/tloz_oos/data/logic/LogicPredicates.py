@@ -198,32 +198,50 @@ def oos_has_required_jewels(state: CollectionState, player: int):
     return count >= target_count
 
 
-def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int):
+def oos_can_reach_lost_woods_pedestal(state: CollectionState, player: int, allow_default: bool = False):
     world = state.multiworld.worlds[player]
     seasons_in_pedestal_sequence = [season for [_, season] in world.lost_woods_item_sequence]
 
     return all([
-        oos_can_use_ember_seeds(state, player, False),
-        state.has("Phonograph", player),
-        oos_can_complete_season_sequence(state, player, seasons_in_pedestal_sequence)
+        oos_can_complete_season_sequence(state, player, seasons_in_pedestal_sequence, allow_default),
+        any([
+            all([
+                oos_can_use_ember_seeds(state, player, False),
+                state.has("Phonograph", player)
+            ]),
+            all([
+                # if sequence is vanilla, medium+ players are expected to know it
+                oos_option_medium_logic(state, player),
+                not state.multiworld.worlds[player].options.randomize_lost_woods_item_sequence
+            ])
+        ])
     ])
 
 
-def oos_can_complete_lost_woods_main_sequence(state: CollectionState, player: int):
+def oos_can_complete_lost_woods_main_sequence(state: CollectionState, player: int, allow_default: bool = False):
     world = state.multiworld.worlds[player]
     seasons_in_main_sequence = [season for [_, season] in world.lost_woods_main_sequence]
 
     return all([
-        oos_can_break_mushroom(state, player, False),
-        oos_has_shield(state, player),
-        oos_can_complete_season_sequence(state, player, seasons_in_main_sequence)
+        oos_can_complete_season_sequence(state, player, seasons_in_main_sequence, allow_default),
+        any([
+            all([
+                oos_can_break_mushroom(state, player, False),
+                oos_has_shield(state, player)
+            ]),
+            all([
+                # if sequence is vanilla, medium+ players are expected to know it
+                oos_option_medium_logic(state, player),
+                not state.multiworld.worlds[player].options.randomize_lost_woods_main_sequence
+            ])
+        ])
     ])
 
 
-def oos_can_complete_season_sequence(state: CollectionState, player: int, season_sequence: list[int]):
+def oos_can_complete_season_sequence(state: CollectionState, player: int, season_sequence: list[int], allow_default: bool = False):
     # In medium logic and above, it is assumed the player can exploit the default season from Lost Woods to cheese
     # the first few seasons of the sequence even if they don't own the matching rod.
-    if oos_option_medium_logic(state, player):
+    if allow_default and oos_option_medium_logic(state, player):
         default_season = oos_get_default_season(state, player, "LOST_WOODS")
         while len(season_sequence) > 0 and season_sequence[0] == default_season:
             del season_sequence[0]
@@ -553,13 +571,6 @@ def oos_can_use_pegasus_seeds(state: CollectionState, player: int):
     ])
 
 
-def oos_can_warp_using_gale_seeds(state: CollectionState, player: int):
-    return all([
-        oos_has_satchel(state, player),
-        oos_has_gale_seeds(state, player)
-    ])
-
-
 def oos_can_use_gale_seeds_offensively(state: CollectionState, player: int):
     # If we don't have gale seeds or aren't at least in medium logic, don't even try
     if not oos_has_gale_seeds(state, player) or not oos_option_medium_logic(state, player):
@@ -577,13 +588,6 @@ def oos_can_use_gale_seeds_offensively(state: CollectionState, player: int):
     ])
 
 
-def oos_can_warp(state: CollectionState, player: int):
-    # Never expect points of no return / risky checks for casual logic
-    if not oos_option_medium_logic(state, player):
-        return False
-    return oos_can_warp_using_gale_seeds(state, player) or oos_option_allow_warp_to_start(state, player)
-
-
 def oos_can_use_mystery_seeds(state: CollectionState, player: int):
     return all([
         oos_can_use_seeds(state, player),
@@ -595,20 +599,8 @@ def oos_can_use_mystery_seeds(state: CollectionState, player: int):
 
 def oos_can_break_bush(state: CollectionState, player: int, can_summon_companion: bool = False):
     return any([
-        oos_has_sword(state, player),
-        oos_has_magic_boomerang(state, player),
-        oos_has_bracelet(state, player),
-        (can_summon_companion and oos_has_flute(state, player)),
-        all([
-            # Consumables need at least medium logic, since they need a good knowledge of the game
-            # not to be frustrating
-            oos_option_medium_logic(state, player),
-            any([
-                oos_has_bombs(state, player, 2),
-                oos_can_use_ember_seeds(state, player, False),
-                (oos_has_slingshot(state, player) and oos_has_gale_seeds(state, player)),
-            ])
-        ]),
+        oos_can_break_flowers(state, player, can_summon_companion),
+        oos_has_bracelet(state, player)
     ])
 
 
@@ -641,7 +633,7 @@ def oos_can_break_pot(state: CollectionState, player: int):
     ])
 
 
-def oos_can_break_flowers(state: CollectionState, player: int, can_summon_companion: bool):
+def oos_can_break_flowers(state: CollectionState, player: int, can_summon_companion: bool = False):
     return any([
         oos_has_sword(state, player),
         oos_has_magic_boomerang(state, player),
@@ -703,8 +695,7 @@ def oos_can_harvest_gasha(state: CollectionState, player: int, count: int):
     return all([
         reachable_soils.count(True) >= count,  # Enough soils are reachable
         state.has("Gasha Seed", player, count),  # Enough seeds to plant
-        oos_can_kill_normal_enemy(state, player),  # Can increase kill count to make the tree grow
-        oos_has_sword(state, player) or oos_has_fools_ore(state, player)  # Can actually harvest the nut
+        oos_has_sword(state, player) or oos_has_fools_ore(state, player)  # Can actually harvest the nut, and get kills
     ])
 
 
@@ -832,6 +823,7 @@ def oos_can_trigger_lever(state: CollectionState, player: int):
 
 def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
     return any([
+        oos_can_punch(state, player),
         oos_has_sword(state, player),
         oos_has_fools_ore(state, player),
         oos_has_boomerang(state, player),
@@ -839,6 +831,7 @@ def oos_can_trigger_lever_from_minecart(state: CollectionState, player: int):
 
         oos_can_use_scent_seeds(state, player),
         oos_can_use_mystery_seeds(state, player),
+        oos_can_use_ember_seeds(state, player, False),
         oos_has_slingshot(state, player),  # any seed works using slingshot
     ])
 
