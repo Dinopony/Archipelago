@@ -3,7 +3,11 @@ from .LogicPredicates import *
 
 def make_holodrum_logic(player: int, origin_name: str):
     return [
-        ["impa's house", "horon village", True, None],
+        ["maple encounter", "maple trade", False, lambda state: any([
+            state.has("Lon Lon Egg", player),
+            oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
+        ])],
+
         ["horon village", "mayor's gift", False, None],
         ["horon village", "vasu's gift", False, None],
         ["horon village", "mayor's house secret room", False, lambda state: oos_has_bombs(state, player)],
@@ -55,13 +59,8 @@ def make_holodrum_logic(player: int, origin_name: str):
         # WESTERN COAST ##############################################################################################
 
         ["horon village", "western coast", True, None],
-        ["western coast", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["western coast", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["western coast", "black beast's chest", False, lambda state: all([
             all([
                 oos_has_slingshot(state, player),
@@ -126,13 +125,8 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         ["horon village", "suburbs", True, lambda state: oos_can_use_ember_seeds(state, player, False)],
 
-        ["suburbs", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["suburbs", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["suburbs", "windmill heart piece", False, lambda state: oos_season_in_eastern_suburbs(state, player, SEASON_WINTER)],
         ["suburbs", "guru-guru trade", False, lambda state: any([
             state.has("Engine Grease", player),
@@ -155,23 +149,13 @@ def make_holodrum_logic(player: int, origin_name: str):
             oos_can_swim(state, player, True),
             oos_can_jump_1_wide_liquid(state, player, True)
         ])],
-        ["suburbs fairy fountain", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["suburbs fairy fountain", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["suburbs", "suburbs fairy fountain (winter)", True, lambda state: any([
             oos_season_in_eastern_suburbs(state, player, SEASON_WINTER)
         ])],
-        ["suburbs fairy fountain (winter)", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["suburbs fairy fountain (winter)", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["suburbs fairy fountain (winter)", "suburbs fairy fountain", False, lambda state: \
             oos_can_remove_season(state, player, SEASON_WINTER)],
         ["suburbs fairy fountain", "suburbs fairy fountain (winter)", False, lambda state: \
@@ -188,13 +172,8 @@ def make_holodrum_logic(player: int, origin_name: str):
         ["moblin road", "suburbs fairy fountain (winter)", False, lambda state: \
             oos_season_in_eastern_suburbs(state, player, SEASON_WINTER)],
         
-        ["moblin road", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["moblin road", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["sunken city", "moblin road", False, lambda state: all([
             oos_has_flippers(state, player),
@@ -253,13 +232,9 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         # EYEGLASS LAKE SECTOR #########################################################################################
 
-        ["impa's house", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["impa's house", "horon village", True, None],
+        ["impa's house", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["impa's house", "eyeglass lake, across bridge", False, lambda state: any([
             oos_can_jump_4_wide_pit(state, player),
             all([
@@ -320,13 +295,8 @@ def make_holodrum_logic(player: int, origin_name: str):
             oos_can_jump_1_wide_pit(state, player, True)
         ])],
 
-        ["d5 stump", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["d5 stump", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["d5 stump", "eyeglass lake (default)", True, lambda state: all([
             any([
@@ -417,13 +387,8 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         # NORTH HORON / HOLODRUM PLAIN ###############################################################################
 
-        ["north horon", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["north horon", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         ["north horon", "north horon tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
         ["north horon", "blaino prize", False, lambda state: oos_can_farm_rupees(state, player)],
         ["north horon", "cave north of D1", False, lambda state: all([
@@ -453,13 +418,8 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         ["north horon", "temple remains lower stump", True, lambda state: oos_can_jump_3_wide_pit(state, player)],
 
-        ["ghastly stump", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["ghastly stump", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["ghastly stump", "mrs. ruul trade", False, lambda state: any([
             state.has("Ghastly Doll", player),
@@ -503,13 +463,8 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         # SPOOL SWAMP #############################################################################################
 
-        ["spool swamp north", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["spool swamp north", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         
         ["spool swamp north", "spool swamp tree", False, lambda state: oos_can_harvest_tree(state, player, True)],
 
@@ -571,13 +526,8 @@ def make_holodrum_logic(player: int, origin_name: str):
             ])
         ])],
 
-        ["spool swamp south near gasha spot", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["spool swamp south near gasha spot", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["spool swamp south near gasha spot", "spool swamp portal", True, lambda state: oos_has_bracelet(state, player)],
 
@@ -587,13 +537,8 @@ def make_holodrum_logic(player: int, origin_name: str):
             oos_can_swim(state, player, True)
         ])],
 
-        ["spool swamp south", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["spool swamp south", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         # make sure you can go directly from the stump to south, or default season
         # just because you can reach the stump doesn't mean you can also get there
@@ -892,23 +837,13 @@ def make_holodrum_logic(player: int, origin_name: str):
         ["goron blocked cave entrance", "mount cucco", False, lambda state: \
             oos_can_remove_snow(state, player, False)],
 
-        ["goron blocked cave entrance", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["goron blocked cave entrance", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["goron blocked cave entrance", "goron mountain", True, lambda state: oos_has_bracelet(state, player)],
 
-        ["goron mountain", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["goron mountain", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["goron blocked cave entrance", "goron's gift", False, lambda state: oos_has_bombs(state, player)],
 
@@ -956,13 +891,8 @@ def make_holodrum_logic(player: int, origin_name: str):
             oos_can_break_mushroom(state, player, False)
         ])],
 
-        ["lost woods stump", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["lost woods stump", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["lost woods stump", "lost woods", False, lambda state: oos_can_reach_lost_woods_pedestal(state, player)],
         # special case for getting to d6 using default season
@@ -977,13 +907,8 @@ def make_holodrum_logic(player: int, origin_name: str):
             oos_option_medium_logic(state, player)
         ])],
 
-        ["d6 sector", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["d6 sector", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
 
         ["d6 sector", "tarm ruins tree", False, lambda state: oos_can_harvest_tree(state, player, False)],
         ["d6 sector", "tarm ruins, under tree", False, lambda state: all([
@@ -1023,13 +948,8 @@ def make_holodrum_logic(player: int, origin_name: str):
 
         # TEMPLE REMAINS ####################################################################################
 
-        ["temple remains lower stump", "maple trade", False, lambda state: all([
-            oos_can_meet_maple(state, player),
-            any([
-                state.has("Lon Lon Egg", player),
-                oos_self_locking_item(state, player, "maple trade", "Lon Lon Egg")
-            ])
-        ])],
+        ["temple remains lower stump", "maple encounter", False, lambda state: 
+            oos_can_meet_maple(state, player)],
         
         ["temple remains lower stump", "temple remains upper stump", False, lambda state: any([
             all([  # Volcano rule

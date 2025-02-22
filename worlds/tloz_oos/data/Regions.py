@@ -14,6 +14,7 @@ REGIONS = [
     "syrup trade",
     "syrup shop",
     "mrs. ruul trade",
+    "maple encounter",
     "maple trade",
     "subrosian chef trade",
     "biggoron trade",
