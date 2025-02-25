@@ -102,6 +102,7 @@ class OracleOfSeasonsWorld(World):
     item_name_to_id = build_item_name_to_id_dict()
     item_name_groups = ITEM_GROUPS
     location_name_groups = LOCATION_GROUPS
+    origin_region_name = "impa's house"
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -506,7 +507,7 @@ class OracleOfSeasonsWorld(World):
             self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.EXCLUDED
 
     def set_rules(self):
-        create_connections(self.multiworld, self.player)
+        create_connections(self.multiworld, self.player, self.origin_region_name)
         apply_self_locking_rules(self.multiworld, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
@@ -528,6 +529,11 @@ class OracleOfSeasonsWorld(World):
         if self.remaining_progressive_gasha_seeds > 0 and name == "Gasha Seed":
             self.remaining_progressive_gasha_seeds -= 1
             classification = ItemClassification.progression
+
+        # Players in Medium+ are expected to know the default paths through Lost Woods, Phonograph becomes filler
+        difficulties = ["medium", "hard"]
+        if self.options.logic_difficulty in difficulties and not self.options.randomize_lost_woods_item_sequence and name == "Phonograph":
+            classification = ItemClassification.filler
 
         return Item(name, classification, ap_code, self.player)
 
@@ -790,7 +796,7 @@ class OracleOfSeasonsWorld(World):
                    "sign_guy_requirement", "golden_beasts_requirement",
                    # Tracker QoL
                    "enforce_potion_in_shop", "keysanity_small_keys", "keysanity_boss_keys", "starting_maps_compasses",
-                   "deterministic_gasha_locations"
+                   "deterministic_gasha_locations", "shuffle_business_scrubs", "shop_prices"
                    ]
 
         slot_data = self.options.as_dict(*options)
@@ -804,6 +810,9 @@ class OracleOfSeasonsWorld(World):
 
         slot_data["dungeon_entrances"] = self.dungeon_entrances
         slot_data["portal_connections"] = self.portal_connections
+        slot_data["shop_order"] = self.shop_order
+        slot_data["shop_rupee_requirements"] = self.shop_rupee_requirements
+        slot_data["shop_costs"] = self.shop_prices
 
         return slot_data
 

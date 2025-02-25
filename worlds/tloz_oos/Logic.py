@@ -5,7 +5,7 @@ from worlds.tloz_oos.data.logic.OverworldLogic import make_holodrum_logic
 from worlds.tloz_oos.data.logic.SubrosiaLogic import make_subrosia_logic
 
 
-def create_connections(multiworld: MultiWorld, player: int):
+def create_connections(multiworld: MultiWorld, player: int, origin_name: str):
     dungeon_entrances = []
     for reg1, reg2 in multiworld.worlds[player].dungeon_entrances.items():
         dungeon_entrances.append([reg1, reg2, True, None])
@@ -15,7 +15,7 @@ def create_connections(multiworld: MultiWorld, player: int):
         portal_connections.append([reg1, reg2, True, None])
 
     all_logic = [
-        make_holodrum_logic(player),
+        make_holodrum_logic(player, origin_name),
         make_subrosia_logic(player),
         make_d0_logic(player),
         make_d1_logic(player),
