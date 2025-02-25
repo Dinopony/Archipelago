@@ -1086,10 +1086,31 @@ def make_holodrum_logic(player: int, origin_name: str):
             ])
         ])],
 
-        ["onox beaten", "ganon beaten", False, lambda state: all([
-            oos_has_sword(state, player, False),
-            oos_has_slingshot(state, player),
-            oos_can_use_ember_seeds(state, player, True),
+        ["onox beaten", "ganon beaten", False, lambda state: any([
+            all([
+                # casual rules
+                oos_has_noble_sword(state, player),
+                oos_has_slingshot(state, player),
+                oos_can_use_ember_seeds(state, player, False),
+                oos_can_use_mystery_seeds(state, player)
+            ]),
+            all([
+                oos_option_medium_logic(state, player),
+                oos_has_sword(state, player, False),
+                any([
+                    # all seeds damage Twinrova phase 2
+                    oos_has_slingshot(state, player),
+                    all([
+                        oos_option_hard_logic(state, player),
+                        oos_can_use_seeds(state, player),
+                        # satchel can't use pegasus to damage, but all others work
+                        oos_has_ember_seeds(state, player),
+                        oos_has_mystery_seeds(state, player),
+                        oos_has_scent_seeds(state, player),
+                        oos_has_gale_seeds(state, player)
+                    ])
+                ])
+            ])
         ])],
 
         # GOLDEN BEASTS #############################################################################################
