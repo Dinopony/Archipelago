@@ -1104,10 +1104,12 @@ def make_holodrum_logic(player: int, origin_name: str):
                         oos_option_hard_logic(state, player),
                         oos_can_use_seeds(state, player),
                         # satchel can't use pegasus to damage, but all others work
-                        oos_has_ember_seeds(state, player),
-                        oos_has_mystery_seeds(state, player),
-                        oos_has_scent_seeds(state, player),
-                        oos_has_gale_seeds(state, player)
+                        any([
+                            oos_has_ember_seeds(state, player),
+                            oos_has_mystery_seeds(state, player),
+                            oos_has_scent_seeds(state, player),
+                            oos_has_gale_seeds(state, player)
+                        ])
                     ])
                 ])
             ])
